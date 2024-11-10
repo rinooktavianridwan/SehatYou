@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +37,17 @@ fun SettingsPage() {
         contentAlignment = Alignment.TopCenter
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            IconButton(
+                onClick = { /*TODO*/ },
+                colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
+                modifier = Modifier
+                    .size(60.dp, 60.dp)
+                    .align(Alignment.End)
+                    .padding(start = 0.dp, top = 15.dp, end = 20.dp, bottom = 0.dp),
+            )
+            {
+                Icon(imageVector  = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back")
+            }
             Text(
                 text = "Setting",
                 fontSize = 30.sp,
@@ -46,25 +61,54 @@ fun SettingsPage() {
                     .background(Color.Blue),
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(40.dp, 80.dp),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
-//                        SettingOption(
-//                            icon = painterResource(id = R.drawable.ic_profile),
-//                            label = "Profil"
-//                        )
-//                        SettingOption(
-//                            icon = painterResource(id = R.drawable.ic_smartwatch),
-//                            label = "SmartWatch"
-//                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        SettingOption(
+                            icon = painterResource(id = R.drawable.iconprofile),
+                            label = "Profil"
+                        )
+                        SettingOption(
+                            icon = painterResource(id = R.drawable.iconsmartwacth),
+                            label = "SmartWatch"
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        SettingOption(
+                            icon = painterResource(id = R.drawable.iconlanguage),
+                            label = "Bahasa"
+                        )
+                        SettingOption(
+                            icon = painterResource(id = R.drawable.iconcustomerservice),
+                            label = "Service"
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        SettingOption(
+                            icon = painterResource(id = R.drawable.iconnotification),
+                            label = "Notifikasi"
+                        )
+                        SettingOption(
+                            icon = painterResource(id = R.drawable.iconlogout),
+                            label = "Log Out"
+                        )
                     }
                 }
             }
         }
-
     }
-
 }
 
 
