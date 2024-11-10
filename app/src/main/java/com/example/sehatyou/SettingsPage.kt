@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,14 +21,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,8 +44,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -195,24 +201,69 @@ fun NotificationIntervalDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = "Pilih Interval Notifikasi")
+            Text(
+                text = "Pilih Interval Notifikasi",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         },
         text = {
-            Column {
-                TextField(
-                    value = interval,
-                    onValueChange = onIntervalChanged,
-                    label = { Text("Interval Notifikasi (dalam angka)") },
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Text(text = "notifikasi per hari")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            colorResource(id = R.color.FFDEC5),
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TextField(
+                        value = interval,
+                        onValueChange = onIntervalChanged,
+                        textStyle = TextStyle(fontSize = 18.sp),
+                        placeholder = { Text("......") },
+                        singleLine = true,
+                        modifier = Modifier
+                            .width(60.dp)
+                            .background(Color.Transparent),
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            cursorColor = Color.Black,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "notifikasi per hari",
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    )
+                }
             }
         },
         confirmButton = {
-            Button(onClick = onSave) {
-                Text("Simpan")
+            Button(
+                onClick = onSave,
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .padding(end = 8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.F7B087), // Change background color
+                    contentColor = Color.White // Change text/icon color
+                ),
+            ) {
+                Text("Simpan", color = Color.Black)
             }
         },
         dismissButton = {
@@ -222,6 +273,7 @@ fun NotificationIntervalDialog(
         }
     )
 }
+
 
 @Composable
 fun LanguageSelectionDialog(
@@ -233,32 +285,72 @@ fun LanguageSelectionDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = "Pilih Bahasa")
+            Text(
+                text = "Pilih Bahasa",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        colorResource(id = R.color.FFDEC5),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .padding(8.dp),
+                textAlign = TextAlign.Center
+            )
         },
         text = {
-            Column(modifier = Modifier.selectableGroup()) {
+            Column {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            colorResource(id = R.color.FFDEC5),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .clickable { onLanguageSelected("Bahasa Indonesia") }
+                        .padding(16.dp, 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    Text(text = "Bahasa Indonesia")
                     Checkbox(
                         checked = currentLanguage == "Bahasa Indonesia",
                         onCheckedChange = { if (it) onLanguageSelected("Bahasa Indonesia") }
                     )
-                    Text(text = "Bahasa Indonesia")
+
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            colorResource(id = R.color.FFDEC5),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .clickable { onLanguageSelected("Bahasa Inggris") }
+                        .padding(16.dp, 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    Text(text = "Bahasa Inggris")
                     Checkbox(
                         checked = currentLanguage == "Bahasa Inggris",
                         onCheckedChange = { if (it) onLanguageSelected("Bahasa Inggris") }
                     )
-                    Text(text = "Bahasa Inggris")
                 }
             }
         },
         confirmButton = {
-            Button(onClick = onSave) {
+            Button(
+                onClick = onSave,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.F7B087), // Change background color
+                    contentColor = Color.White // Change text/icon color
+                ),
+            ) {
                 Text("Simpan")
             }
         },
@@ -269,6 +361,7 @@ fun LanguageSelectionDialog(
         }
     )
 }
+
 
 @Composable
 fun SettingOption(icon: Painter, label: String, onClick: (() -> Unit)? = null) {
