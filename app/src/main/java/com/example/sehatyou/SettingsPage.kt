@@ -1,6 +1,7 @@
 package com.example.sehatyou
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,20 +12,36 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,36 +49,64 @@ import com.example.sehatyou.ui.theme.SehatYouTheme
 
 @Composable
 fun SettingsPage() {
+    var showDialogBahasa by remember { mutableStateOf(false) }
+    var selectedLanguage by remember { mutableStateOf("Bahasa Indonesia") }
+    var showDialogNotifikasi by remember { mutableStateOf(false) }
+    var notificationInterval by remember { mutableStateOf("") }
+
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.F5F5F5)),
         contentAlignment = Alignment.TopCenter
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            IconButton(
-                onClick = { /*TODO*/ },
-                colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
-                modifier = Modifier
-                    .size(60.dp, 60.dp)
-                    .align(Alignment.End)
-                    .padding(start = 0.dp, top = 15.dp, end = 20.dp, bottom = 0.dp),
-            )
-            {
-                Icon(imageVector  = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back")
+            Box(modifier = Modifier.fillMaxWidth()) {
+                IconButton(
+                    onClick = { /*TODO*/ },
+                    colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
+                    modifier = Modifier
+                        .size(60.dp, 60.dp)
+                        .align(Alignment.TopEnd)
+                        .padding(start = 0.dp, top = 20.dp, end = 20.dp, bottom = 0.dp)
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = CircleShape,
+                            clip = false
+                        )
+                        .background(Color.White, shape = CircleShape),
+                )
+                {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "back"
+                    )
+                }
+                Text(
+                    text = "Pengaturan",
+                    fontSize = 40.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(top = 40.dp, bottom = 20.dp)
+                        .align(Alignment.Center),
+                    color = colorResource(id = R.color.F7B087)
+                )
             }
-            Text(
-                text = "Setting",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 20.dp)
-            )
+
             Spacer(modifier = Modifier.height(20.dp))
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Blue),
+                    .fillMaxSize()
+                    .background(
+                        colorResource(id = R.color.FFDEC5),
+                        RoundedCornerShape(25.dp, 25.dp, 0.dp, 0.dp)
+                    )
+                    .padding(0.dp, 40.dp),
             ) {
                 Column(
-                    modifier = Modifier.padding(40.dp, 80.dp),
+                    modifier = Modifier
+                        .padding(40.dp, 80.dp)
+                        .fillMaxSize(),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Row(
@@ -84,7 +129,8 @@ fun SettingsPage() {
                     ) {
                         SettingOption(
                             icon = painterResource(id = R.drawable.iconlanguage),
-                            label = "Bahasa"
+                            label = "Bahasa",
+                            onClick = { showDialogBahasa = true } // Menampilkan dialog saat diklik
                         )
                         SettingOption(
                             icon = painterResource(id = R.drawable.iconcustomerservice),
@@ -98,7 +144,8 @@ fun SettingsPage() {
                     ) {
                         SettingOption(
                             icon = painterResource(id = R.drawable.iconnotification),
-                            label = "Notifikasi"
+                            label = "Notifikasi",
+                            onClick = { showDialogNotifikasi = true }
                         )
                         SettingOption(
                             icon = painterResource(id = R.drawable.iconlogout),
@@ -109,23 +156,140 @@ fun SettingsPage() {
             }
         }
     }
+
+    // Dialog untuk memilih bahasa
+    if (showDialogBahasa) {
+        LanguageSelectionDialog(
+            currentLanguage = selectedLanguage,
+            onDismiss = { showDialogBahasa = false },
+            onSave = {
+                showDialogBahasa = false
+            },
+            onLanguageSelected = { language ->
+                selectedLanguage = language
+            }
+        )
+    }
+    // Dialog untuk memilih interval notifikasi
+    if (showDialogNotifikasi) {
+        NotificationIntervalDialog(
+            interval = notificationInterval,
+            onDismiss = { showDialogNotifikasi = false },
+            onSave = {
+                showDialogNotifikasi = false
+            },
+            onIntervalChanged = { newInterval ->
+                notificationInterval = newInterval
+            }
+        )
+    }
 }
 
+@Composable
+fun NotificationIntervalDialog(
+    interval: String,
+    onDismiss: () -> Unit,
+    onSave: () -> Unit,
+    onIntervalChanged: (String) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(text = "Pilih Interval Notifikasi")
+        },
+        text = {
+            Column {
+                TextField(
+                    value = interval,
+                    onValueChange = onIntervalChanged,
+                    label = { Text("Interval Notifikasi (dalam angka)") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(text = "notifikasi per hari")
+            }
+        },
+        confirmButton = {
+            Button(onClick = onSave) {
+                Text("Simpan")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Batal")
+            }
+        }
+    )
+}
 
 @Composable
-fun SettingOption(icon: Painter, label: String) {
+fun LanguageSelectionDialog(
+    currentLanguage: String,
+    onDismiss: () -> Unit,
+    onSave: () -> Unit,
+    onLanguageSelected: (String) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(text = "Pilih Bahasa")
+        },
+        text = {
+            Column(modifier = Modifier.selectableGroup()) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = currentLanguage == "Bahasa Indonesia",
+                        onCheckedChange = { if (it) onLanguageSelected("Bahasa Indonesia") }
+                    )
+                    Text(text = "Bahasa Indonesia")
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = currentLanguage == "Bahasa Inggris",
+                        onCheckedChange = { if (it) onLanguageSelected("Bahasa Inggris") }
+                    )
+                    Text(text = "Bahasa Inggris")
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = onSave) {
+                Text("Simpan")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Batal")
+            }
+        }
+    )
+}
+
+@Composable
+fun SettingOption(icon: Painter, label: String, onClick: (() -> Unit)? = null) {
     Column(
         modifier = Modifier
-            .size(100.dp)
+            .size(140.dp)
             .background(Color.White, shape = RoundedCornerShape(8.dp))
-            .padding(8.dp),
+            .shadow(
+                elevation = 12.dp,
+                shape = RoundedCornerShape(8.dp),
+                clip = false
+            )
+            .background(Color.White, shape = RoundedCornerShape(8.dp))
+            .clickable { onClick?.invoke() }, // Menambahkan clickable untuk tombol
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
             painter = icon,
             contentDescription = null,
-            modifier = Modifier.size(48.dp),
+            modifier = Modifier.size(80.dp),
             tint = Color.Unspecified
         )
         Spacer(modifier = Modifier.height(8.dp))
