@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,8 +25,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -51,117 +48,119 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.ui.theme.SehatYouTheme
 
 @Composable
-fun SettingsPage() {
+fun SettingsPage(navController: NavController = rememberNavController()) {
     var showDialogBahasa by remember { mutableStateOf(false) }
     var selectedLanguage by remember { mutableStateOf("Bahasa Indonesia") }
     var showDialogNotifikasi by remember { mutableStateOf(false) }
     var notificationInterval by remember { mutableStateOf("") }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.F5F5F5)),
-        contentAlignment = Alignment.TopCenter
+            .background(colorResource(id = R.color.F5F5F5))
+            .padding(top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                IconButton(
-                    onClick = { /*TODO*/ },
-                    colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
-                    modifier = Modifier
-                        .size(60.dp, 60.dp)
-                        .align(Alignment.TopEnd)
-                        .padding(start = 0.dp, top = 20.dp, end = 20.dp, bottom = 0.dp)
-                        .shadow(
-                            elevation = 8.dp,
-                            shape = CircleShape,
-                            clip = false
-                        )
-                        .background(Color.White, shape = CircleShape),
-                )
-                {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "back"
+        Box(modifier = Modifier.fillMaxWidth()) {
+            IconButton(
+                onClick = {navController.navigate("home")},
+                colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
+                modifier = Modifier
+                    .size(60.dp, 60.dp)
+                    .align(Alignment.TopEnd)
+                    .padding(start = 0.dp, top = 20.dp, end = 20.dp, bottom = 0.dp)
+                    .shadow(
+                        elevation = 8.dp,
+                        shape = CircleShape,
+                        clip = false
                     )
-                }
-                Text(
-                    text = "Pengaturan",
-                    fontSize = 40.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(top = 40.dp, bottom = 20.dp)
-                        .align(Alignment.Center),
-                    color = colorResource(id = R.color.F7B087)
+                    .background(Color.White, shape = CircleShape),
+            )
+            {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "back"
                 )
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
-            Box(
+            Text(
+                text = "Pengaturan",
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        colorResource(id = R.color.FFDEC5),
-                        RoundedCornerShape(25.dp, 25.dp, 0.dp, 0.dp)
-                    )
-                    .padding(0.dp, 40.dp),
+                    .padding(top = 40.dp, bottom = 20.dp)
+                    .align(Alignment.Center),
+                color = colorResource(id = R.color.F7B087)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    colorResource(id = R.color.FFDEC5),
+                    RoundedCornerShape(25.dp, 25.dp, 0.dp, 0.dp)
+                )
+                .padding(0.dp, 40.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(40.dp, 80.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(40.dp, 80.dp)
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceBetween
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        SettingOption(
-                            icon = painterResource(id = R.drawable.iconprofile),
-                            label = "Profil"
-                        )
-                        SettingOption(
-                            icon = painterResource(id = R.drawable.iconsmartwacth),
-                            label = "SmartWatch"
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        SettingOption(
-                            icon = painterResource(id = R.drawable.iconlanguage),
-                            label = "Bahasa",
-                            onClick = { showDialogBahasa = true } // Menampilkan dialog saat diklik
-                        )
-                        SettingOption(
-                            icon = painterResource(id = R.drawable.iconcustomerservice),
-                            label = "Service"
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        SettingOption(
-                            icon = painterResource(id = R.drawable.iconnotification),
-                            label = "Notifikasi",
-                            onClick = { showDialogNotifikasi = true }
-                        )
-                        SettingOption(
-                            icon = painterResource(id = R.drawable.iconlogout),
-                            label = "Log Out"
-                        )
-                    }
+                    SettingOption(
+                        icon = painterResource(id = R.drawable.iconprofile),
+                        label = "Profil"
+                    )
+                    SettingOption(
+                        icon = painterResource(id = R.drawable.iconsmartwacth),
+                        label = "SmartWatch"
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    SettingOption(
+                        icon = painterResource(id = R.drawable.iconlanguage),
+                        label = "Bahasa",
+                        onClick = { showDialogBahasa = true } // Menampilkan dialog saat diklik
+                    )
+                    SettingOption(
+                        icon = painterResource(id = R.drawable.iconcustomerservice),
+                        label = "Service"
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    SettingOption(
+                        icon = painterResource(id = R.drawable.iconnotification),
+                        label = "Notifikasi",
+                        onClick = { showDialogNotifikasi = true }
+                    )
+                    SettingOption(
+                        icon = painterResource(id = R.drawable.iconlogout),
+                        label = "Log Out"
+                    )
                 }
             }
         }
     }
+
 
     // Dialog untuk memilih bahasa
     if (showDialogBahasa) {
