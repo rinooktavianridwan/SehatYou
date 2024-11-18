@@ -1,95 +1,152 @@
 package com.example.sehatyou
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.sehatyou.ui.theme.SehatYouTheme
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun LoginPage(navController: NavController) {
+fun LoginPage() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFFFE1CE)) // Warna latar belakang sesuai desain
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(50.dp))
+
+        // Gambar logo otak dengan tanda plus
+        Image(
+            painter = painterResource(id = R.drawable.logo), // Pastikan file logo tersedia
+            contentDescription = "Logo",
+            modifier = Modifier.size(120.dp)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = "Masuk",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF3C1732), // Warna teks sesuai desain
+            modifier = Modifier
+                .fillMaxWidth() // Memastikan teks mengambil lebar penuh
+                .padding(start = 8.dp) // Geser teks ke kiri
         )
+
+        Text(
+            text = "Halo! Selamat Datang",
+            fontSize = 16.sp,
+            color = Color(0xFF5A527B),
+            modifier = Modifier
+                .fillMaxWidth() // Memastikan teks mengambil lebar penuh
+                .padding(start = 8.dp) // Geser teks ke kiri
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Input email
+        Column {
+            Text(text = "Alamat Email", fontSize = 14.sp, color = Color.Gray)
+            BasicTextField(
+                value = email,
+                onValueChange = { email = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color.White, shape = MaterialTheme.shapes.small)
+                    .padding(16.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Alamat Email") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Kata Sandi") },
-            visualTransformation = PasswordVisualTransformation()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+
+        // Input kata sandi
+        Column {
+            Text(text = "Kata Sandi", fontSize = 14.sp, color = Color.Gray)
+            BasicTextField(
+                value = password,
+                onValueChange = { password = it },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color.White, shape = MaterialTheme.shapes.small)
+                    .padding(16.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Tombol masuk
         Button(
-            onClick = {
-                if (email == "user@example.com" && password == "password123") {
-                    navController.navigate("home")
+            onClick = { /* Handle login */ },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3C1732))
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Masuk dengan",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.gmail),
+                    contentDescription = "Logo Gmail",
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = buildAnnotatedString {
+                append("Belum punya akun? ")
+                withStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.SemiBold,
+                        textDecoration = TextDecoration.Underline,
+                        color = Color.Black
+                    )
+                ) {
+                    append("Daftar sekarang")
                 }
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFf44336))
-        ) {
-            Text(text = "MASUK")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Masuk dengan Google")
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Belum punya akun? Daftar sekarang")
-    }
-}
-
-@Composable
-fun HomeScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "Selamat datang di halaman utama!",
-            style = MaterialTheme.typography.headlineSmall
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
-    }
-}
-
-@Composable
-fun Navigation() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login") {
-        composable("login") { LoginPage(navController = navController) }
-        composable("home") { HomeScreen() }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewLoginPage() {
-    SehatYouTheme {
-        LoginPage(navController = rememberNavController())
-    }
+fun LoginPagePreview() {
+    LoginPage()
 }
