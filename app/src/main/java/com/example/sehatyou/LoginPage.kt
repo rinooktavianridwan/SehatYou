@@ -1,109 +1,95 @@
 package com.example.sehatyou
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.sehatyou.ui.theme.SehatYouTheme
 
 @Composable
-fun LoginScreen() {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+fun LoginPage(navController: NavController) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(colors = listOf(Color(0xFFFCE5E0), Color(0xFFF8D2C2))))
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Text(
+            text = "Masuk",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Alamat Email") }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Kata Sandi") },
+            visualTransformation = PasswordVisualTransformation()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                if (email == "user@example.com" && password == "password123") {
+                    navController.navigate("home")
+                }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFf44336))
         ) {
-            // Title
-            Text(
-                text = "Masuk",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Welcome text
-            Text(
-                text = "Halo!\nSelamat Datang",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Email Input
-            TextField(
-                value = email.value,
-                onValueChange = { email.value = it },
-                label = { Text("Alamat Email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Password Input
-            TextField(
-                value = password.value,
-                onValueChange = { password.value = it },
-                label = { Text("Kata Sandi") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Login Button
-            Button(
-                onClick = { /* Handle login */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-            ) {
-                Text("MASUK")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Register Text
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Belum punya akun?", color = Color.Gray)
-                Spacer(modifier = Modifier.width(4.dp))
-                ClickableText(
-                    text = AnnotatedString("Daftar sekarang"),
-                    onClick = { /* Handle navigation */ },
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color(0xFF4D0051))
-                )
-            }
+            Text(text = "MASUK")
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Masuk dengan Google")
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Belum punya akun? Daftar sekarang")
+    }
+}
+
+@Composable
+fun HomeScreen() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Selamat datang di halaman utama!",
+            style = MaterialTheme.typography.headlineSmall
+        )
+    }
+}
+
+@Composable
+fun Navigation() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") { LoginPage(navController = navController) }
+        composable("home") { HomeScreen() }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewLoginScreen() {
-    LoginScreen()
+fun PreviewLoginPage() {
+    SehatYouTheme {
+        LoginPage(navController = rememberNavController())
+    }
 }
