@@ -29,7 +29,7 @@ fun LoginPage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFE1CE)) // Warna latar belakang sesuai desain
+            .background(Color(0xFFFFE1CE))
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -37,7 +37,7 @@ fun LoginPage() {
 
         // Gambar logo otak dengan tanda plus
         Image(
-            painter = painterResource(id = R.drawable.logo), // Pastikan file logo tersedia
+            painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
             modifier = Modifier.size(120.dp)
         )
@@ -48,10 +48,10 @@ fun LoginPage() {
             text = "Masuk",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF3C1732), // Warna teks sesuai desain
+            color = Color(0xFF3C1732),
             modifier = Modifier
-                .fillMaxWidth() // Memastikan teks mengambil lebar penuh
-                .padding(start = 8.dp) // Geser teks ke kiri
+                .fillMaxWidth()
+                .padding(start = 8.dp)
         )
 
         Text(
@@ -59,8 +59,8 @@ fun LoginPage() {
             fontSize = 16.sp,
             color = Color(0xFF5A527B),
             modifier = Modifier
-                .fillMaxWidth() // Memastikan teks mengambil lebar penuh
-                .padding(start = 8.dp) // Geser teks ke kiri
+                .fillMaxWidth()
+                .padding(start = 8.dp)
         )
 
         Spacer(modifier = Modifier.height(32.dp))
