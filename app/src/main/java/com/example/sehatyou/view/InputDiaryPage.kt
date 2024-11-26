@@ -22,7 +22,7 @@ import com.example.sehatyou.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputDiaryScreen(navController: NavController = rememberNavController()) {
+fun InputDiaryPage(navController: NavController = rememberNavController()) {
     val title = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
 
@@ -130,6 +130,6 @@ fun InputDiaryScreen(navController: NavController = rememberNavController()) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewInputDiaryScreen() {
-    InputDiaryScreen()
+fun PreviewInputDiaryPage() {
+    InputDiaryPage()
 }
