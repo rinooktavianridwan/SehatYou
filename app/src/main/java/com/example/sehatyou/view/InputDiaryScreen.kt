@@ -13,14 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackClick: () -> Unit) {
+fun InputDiaryScreen(navController: NavController = rememberNavController()) {
     val title = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
 
@@ -36,11 +38,13 @@ fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackC
                 style = MaterialTheme.typography.headlineMedium.copy(fontSize = 40.sp, fontWeight = FontWeight.Bold),
                 color = Color(0xFF3E0028),
             )
-            Image(
-                painter = painterResource(id = R.drawable.icon_back),
-                contentDescription = "Back",
-                modifier = Modifier.size(40.dp)
-            )
+            IconButton(onClick = { navController.popBackStack() }) { // Navigate back
+                Image(
+                    painter = painterResource(id = R.drawable.icon_back),
+                    contentDescription = "Back",
+                    modifier = Modifier.size(40.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -109,12 +113,15 @@ fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackC
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(
-                onClick = { onCancelClick() },
+                onClick = { navController.popBackStack() }, // Cancel navigation
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3E0028))
             ) { Text("Batal", color = Color.White) }
 
             Button(
-                onClick = { onSaveClick() },
+                onClick = {
+                    // Navigate to save confirmation or other screen
+                    navController.navigate("save_confirmation")
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3E0028))
             ) { Text("Simpan", color = Color.White) }
         }
@@ -124,9 +131,5 @@ fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackC
 @Preview(showBackground = true)
 @Composable
 fun PreviewInputDiaryScreen() {
-    InputDiaryScreen(
-        onSaveClick = {},
-        onCancelClick = {},
-        onBackClick = {}
-    )
+    InputDiaryScreen()
 }
