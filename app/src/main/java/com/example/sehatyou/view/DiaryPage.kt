@@ -118,7 +118,7 @@ fun EditDiaryPage(navController: NavController = rememberNavController()) {
                 .zIndex(1f) // Ensure button appears on top
         ) {
             IconButton(
-                onClick = { navController.navigate("add_screen") },
+                onClick = { navController.navigate("add_diary") },
                 modifier = Modifier
                     .size(100.dp) // Dynamic size for the button
                     .offset(x = 10.dp)
