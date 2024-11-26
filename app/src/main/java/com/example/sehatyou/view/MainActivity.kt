@@ -28,6 +28,8 @@ class MainActivity : ComponentActivity() {
                     composable("register") { RegisterPage(navController) }
                     composable("login") { LoginPage(navController) }
                     composable("smartwatch") {SmartWatchPage(navController)  }
+                    composable("diary") { EditDiaryPage(navController) }
+                    composable("add_diary") { InputDiaryPage(navController) }
                 }
             }
         }
