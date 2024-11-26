@@ -27,15 +27,8 @@ class MainActivity : ComponentActivity() {
                     composable("suggest") { SuggestPage(navController) }
                     composable("register") { RegisterPage(navController) }
                     composable("login") { LoginPage(navController) }
+                }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+    }g
 }
