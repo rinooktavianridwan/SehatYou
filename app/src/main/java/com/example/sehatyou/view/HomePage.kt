@@ -166,7 +166,9 @@ fun HomePage(navController: NavController = rememberNavController()) {
                         .align(Alignment.TopEnd)
                 ) {
                     IconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            navController.navigate("diary")
+                        },
                         colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White),
                         modifier = Modifier
                             .size(24.dp)
