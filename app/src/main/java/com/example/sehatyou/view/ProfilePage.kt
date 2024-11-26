@@ -1,35 +1,28 @@
-package com.example.sehatyou
+package com.example.sehatyou.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,57 +32,25 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.sql.Time
+import com.example.sehatyou.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PersonalizeBox() {
-    var beratBadan = remember { mutableStateOf("55 kg") }
-    var tinggiBadan = remember { mutableStateOf("174 cm") }
-    var dateState = rememberDatePickerState()
-    var openDialog = remember { mutableStateOf(false) }
-    var tglLahir = remember { mutableStateOf("11/22/2024") }
-    var jamKerjaStart = remember { mutableStateOf("") }
-    var jamKerjaEnd = remember { mutableStateOf("") }
-
-    if (openDialog.value) {
-        DatePickerDialog(
-            onDismissRequest = {
-                openDialog.value = false
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        openDialog.value = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        openDialog.value = false
-                    }
-                ) {
-                    Text("CANCEL")
-                }
-            }
-        ) {
-            DatePicker(
-                state = dateState
-            )
-        }
-    }
+fun ProfileBox() {
+    var namaUser = remember { mutableStateOf("Anton") }
+    var emailUser = remember { mutableStateOf("Anton@bletak.com") }
+    var noHpUser = remember { mutableStateOf("08123456789") }
+    var passwordUser = remember { mutableStateOf("AkunBaru") }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.F5F5F5)),
-    ) {
+        //contentAlignment = Alignment.Center
+        ) {
 
         Column (
             modifier = Modifier.fillMaxSize()
@@ -102,7 +63,7 @@ fun PersonalizeBox() {
                     .align(Alignment.End)
                     .padding(start = 0.dp, top = 15.dp, end = 20.dp, bottom = 0.dp)
                     .shadow(4.dp, CircleShape, ambientColor = Color.Black, spotColor = Color.Black),
-            )
+                )
             {
                 Icon(imageVector  = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back")
             }
@@ -115,7 +76,7 @@ fun PersonalizeBox() {
                     .padding(0.dp, 0.dp, 0.dp, 5.dp)
                     .align(Alignment.CenterHorizontally),
 
-                )
+            )
 
             Text(
                 text = "Ganti Gambar",
@@ -137,13 +98,13 @@ fun PersonalizeBox() {
                         .fillMaxSize()
                         .padding(top = 40.dp, start = 25.dp, end = 25.dp, bottom = 0.dp)
                 ){
-                    Text(text = "Berat Badan")
+                    Text(text = "Nama Pengguna")
 
                     Spacer(modifier = Modifier.height(10.dp))
 
                     OutlinedTextField(
-                        value = beratBadan.value,
-                        onValueChange = {beratBadan.value = it},
+                        value = namaUser.value,
+                        onValueChange = {namaUser.value = it},
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.colors(
@@ -152,18 +113,18 @@ fun PersonalizeBox() {
                         ),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
-                        placeholder = {Text(beratBadan.value)}
+                        placeholder = {Text(namaUser.value)}
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(text = "Tinggi Badan")
+                    Text(text = "Email")
 
                     Spacer(modifier = Modifier.height(10.dp))
 
                     OutlinedTextField(
-                        value = tinggiBadan.value,
-                        onValueChange = {tinggiBadan.value = it},
+                        value = emailUser.value,
+                        onValueChange = {emailUser.value = it},
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.colors(
@@ -172,18 +133,18 @@ fun PersonalizeBox() {
                         ),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
-                        placeholder = {tinggiBadan.value}
+                        placeholder = {Text(emailUser.value)}
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(text = "Tanggal Lahir")
+                    Text(text = "Nomor Telepon")
 
                     Spacer(modifier = Modifier.height(10.dp))
 
                     OutlinedTextField(
-                        value = dateState.selectedDateMillis.toString(),
-                        onValueChange = {},
+                        value = noHpUser.value,
+                        onValueChange = {noHpUser.value = it},
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.colors(
@@ -192,48 +153,52 @@ fun PersonalizeBox() {
                         ),
                         shape = RoundedCornerShape(12.dp),
                         singleLine = true,
-                        placeholder = {dateState.selectedDateMillis}
+                        placeholder = {Text(noHpUser.value)}
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Text(text = "Jam Kerja")
+                    Text(text = "Kata Sandi")
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    Row {
-                        OutlinedTextField(
-                            value = jamKerjaStart.value,
-                            onValueChange = {jamKerjaStart.value = it},
-                            modifier = Modifier
-                                .width(120.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = colorResource(id = R.color.FFDEC5),
-                                unfocusedContainerColor = colorResource(id = R.color.FFDEC5),
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                            singleLine = true,
-                            placeholder = {Text(jamKerjaStart.value)},
-                        )
+                    OutlinedTextField(
+                        value = passwordUser.value,
+                        onValueChange = {passwordUser.value = it},
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = colorResource(id = R.color.FFDEC5),
+                            unfocusedContainerColor = colorResource(id = R.color.FFDEC5),
+                        ),
+                        shape = RoundedCornerShape(12.dp),
+                        singleLine = true,
+                        placeholder = {Text(passwordUser.value)},
+                        visualTransformation = PasswordVisualTransformation()
+                    )
 
-                        Spacer(modifier = Modifier.width(100.dp))
+                    Spacer(modifier = Modifier.height(35.dp))
 
-                        OutlinedTextField(
-                            value = jamKerjaEnd.value,
-                            onValueChange = {jamKerjaEnd.value = it},
-                            modifier = Modifier
-                                .width(120.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = colorResource(id = R.color.FFDEC5),
-                                unfocusedContainerColor = colorResource(id = R.color.FFDEC5),
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                            singleLine = true,
-                            placeholder = {Text(jamKerjaEnd.value)},
+                    Button (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(45.dp)
+                            .padding(start = 45.dp, top = 0.dp, end = 45.dp, bottom = 0.dp),
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.purple3C1732),
+                            contentColor = colorResource(id = R.color.white)
+                        ),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = PaddingValues(0.dp)
+                    ) {
+                        Text(
+                            text = "Personalisasi",
+                            fontSize = 18.sp,
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(80.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     Button (
                         modifier = Modifier
@@ -262,9 +227,8 @@ fun PersonalizeBox() {
     }
 }
 
-
 @Preview
 @Composable
-fun PreviewPersonalizeBox() {
-    PersonalizeBox()
+fun PreviewProfileBox() {
+    ProfileBox()
 }

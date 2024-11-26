@@ -1,4 +1,4 @@
-package com.example.sehatyou
+package com.example.sehatyou.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.example.sehatyou.R
 
 @Composable
 fun DiaryScreen(onEditClick: () -> Unit, onBackClick: () -> Unit, onAddClick: () -> Unit) {

@@ -1,4 +1,4 @@
-package com.example.sehatyou
+package com.example.sehatyou.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.sehatyou.R
 import com.example.sehatyou.ui.theme.SehatYouTheme
 
 @Composable
