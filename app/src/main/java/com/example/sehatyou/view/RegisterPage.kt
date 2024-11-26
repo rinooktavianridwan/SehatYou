@@ -122,8 +122,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {
-                    // Handle registration logic
+                onClick = {navController.navigate("login")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -154,7 +153,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "syarat",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Handle terms click */ }
+                    modifier = Modifier.clickable { /* nnti ditambah */ }
                 )
                 Text(
                     text = " dan ",
@@ -164,7 +163,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "ketentuan layanan.",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Handle policies click */ }
+                    modifier = Modifier.clickable { /* nanti ditambah */ }
                 )
             }
 
@@ -180,7 +179,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "Masuk",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Handle navigation to login */ }
+                    modifier = Modifier.clickable { navController.navigate("login") }
                 )
             }
 

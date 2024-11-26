@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
                     composable("suggest") { SuggestPage(navController) }
                     composable("register") { RegisterPage(navController) }
                     composable("login") { LoginPage(navController) }
+                    composable("smartwatch") {SmartWatchPage(navController)  }
                 }
             }
         }

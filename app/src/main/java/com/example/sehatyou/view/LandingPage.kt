@@ -31,59 +31,65 @@ fun LandingPage(navController: NavController = rememberNavController()) {
     ) {
         // Background with gradient and image
         Image(
-            painter = painterResource(id = R.drawable.landing_page_background), // Replace with your background image
+            painter = painterResource(id = R.drawable.landing_page_background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
-
+            modifier = Modifier.fillMaxSize()
         )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Logo and text
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Logo
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = null,
+                modifier = Modifier.size(180.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Headline texts
+            Text(
+                text = "You Are Enough",
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color(0xFF3C1732),
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+                textAlign = TextAlign.Start
+            )
+
+            Text(
+                text = "Just as You Are",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF3C1732),
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+                textAlign = TextAlign.Start
+            )
+
+            Spacer(modifier = Modifier.weight(0.4f))
+
+            // Buttons
             Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(32.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.logo), // Replace with your logo image
-                    contentDescription = null,
-                    modifier = Modifier.size(200.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "You Are Enough",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color(0xFF3C1732),
-                    fontWeight = FontWeight.Bold, // Membuat teks tebal
-                    fontSize = 30.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp), // Geser teks ke kiri
-                    textAlign = TextAlign.Start // Selaraskan ke kiri
-                )
-                Text(
-                    text = "Just as You Are",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF3C1732),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp),
-                    textAlign = TextAlign.Start
-                )
-            }
-            Spacer(modifier = Modifier.weight(2f))
-
-            Column {
-
                 Button(
-                    onClick = { /* Handle Masuk */ },
+                    onClick = { navController.navigate("login") },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF3C1732),
                         contentColor = Color.White
@@ -95,9 +101,11 @@ fun LandingPage(navController: NavController = rememberNavController()) {
                 ) {
                     Text(text = "MASUK", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+
+                Spacer(modifier = Modifier.height(20.dp))
+
                 Button(
-                    onClick = { /* Handle Daftar */ },
+                    onClick = { navController.navigate("register") },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
                         contentColor = Color(0xFF4A148C)
@@ -115,6 +123,9 @@ fun LandingPage(navController: NavController = rememberNavController()) {
                     Text(text = "DAFTAR", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFF3C1732))
                 }
             }
+
+            // Added small space at the bottom
+            Spacer(modifier = Modifier.weight(0.1f))
         }
     }
 }

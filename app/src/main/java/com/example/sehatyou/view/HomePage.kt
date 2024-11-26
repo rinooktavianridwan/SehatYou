@@ -2,6 +2,7 @@ package com.example.sehatyou.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +75,7 @@ fun HomePage(navController: NavController = rememberNavController()) {
                 )
             }
             IconButton(
-                onClick = {navController.navigate("setting") },
+                onClick = { navController.navigate("setting") },
                 modifier = Modifier.size(60.dp)
             ) {
                 Icon(
@@ -210,7 +211,11 @@ fun HomePage(navController: NavController = rememberNavController()) {
                                 .background(colorResource(id = R.color.F7B087), CircleShape)
                                 .padding(24.dp, 4.dp)
                         )
-                        Text(text = "Lihat Semua", color = colorResource(id = R.color.purple3C1732))
+                        Text(
+                            modifier = Modifier.clickable(onClick = { navController.navigate("suggest") }),
+                            text = "Lihat Semua",
+                            color = colorResource(id = R.color.purple3C1732)
+                        )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     SuggestionCard(

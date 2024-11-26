@@ -58,7 +58,9 @@ fun ProfilePage(navController: NavController = rememberNavController()) {
             modifier = Modifier.fillMaxSize()
         ) {
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate("home")
+                },
                 colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
                 modifier = Modifier
                     .size(60.dp, 60.dp)
@@ -186,7 +188,9 @@ fun ProfilePage(navController: NavController = rememberNavController()) {
                             .fillMaxWidth()
                             .height(45.dp)
                             .padding(start = 45.dp, top = 0.dp, end = 45.dp, bottom = 0.dp),
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            navController.navigate("personalize")
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.purple3C1732),
                             contentColor = colorResource(id = R.color.white)
@@ -207,7 +211,9 @@ fun ProfilePage(navController: NavController = rememberNavController()) {
                             .fillMaxWidth()
                             .height(45.dp)
                             .padding(start = 45.dp, top = 0.dp, end = 45.dp, bottom = 0.dp),
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            navController.navigate("profile")
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.purple3C1732),
                             contentColor = colorResource(id = R.color.white)
