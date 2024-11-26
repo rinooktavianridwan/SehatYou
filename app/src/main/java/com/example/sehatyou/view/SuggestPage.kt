@@ -28,7 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 
 @Composable
-fun SearchPage(navController: NavController = rememberNavController()) {
+fun SuggestPage(navController: NavController = rememberNavController()) {
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -80,5 +80,5 @@ fun SearchPage(navController: NavController = rememberNavController()) {
 @Preview
 @Composable
 fun SearchBoxPreview() {
-    SearchPage()
+    SuggestPage()
 }

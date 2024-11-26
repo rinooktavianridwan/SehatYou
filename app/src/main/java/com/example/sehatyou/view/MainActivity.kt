@@ -22,8 +22,11 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = "home") {
                     composable("home") { HomePage(navController) }
                     composable("setting") { SettingsPage(navController) }
-                    composable("diary") { DiaryPage(navController) }) {  }
-                }
+                    composable("profile") { ProfilePage(navController) }
+                    composable("personalize") { PersonalizePage(navController) }
+                    composable("suggest") { SuggestPage(navController) }
+                    composable("register") { RegisterPage(navController) }
+                    composable("login") { LoginPage(navController) }
             }
         }
     }
