@@ -2,12 +2,14 @@ package com.example.sehatyou.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -33,12 +35,12 @@ fun LoginPage(navController: NavController = rememberNavController()) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFE1CE))
-            .padding(16.dp),
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(50.dp))
 
-        // Gambar logo otak dengan tanda plus
+        // Logo
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
@@ -54,57 +56,103 @@ fun LoginPage(navController: NavController = rememberNavController()) {
             color = Color(0xFF3C1732),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 8.dp)
+                .padding(bottom = 4.dp)
         )
 
         Text(
-            text = "Halo! Selamat Datang",
+            text = "Halo!\nSelamat Datang",
             fontSize = 16.sp,
             color = Color(0xFF5A527B),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Input email
-        Column {
-            Text(text = "Alamat Email", fontSize = 14.sp, color = Color.Gray)
-            BasicTextField(
-                value = email,
-                onValueChange = { email = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .background(Color.White, shape = MaterialTheme.shapes.small)
-                    .padding(16.dp)
+        // Email field
+        Text(
+            text = "Alamat Email",
+            fontSize = 14.sp,
+            color = Color.Gray,
+            modifier = Modifier.fillMaxWidth()
+        )
+        BasicTextField(
+            value = email,
+            onValueChange = { email = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .background(Color.White, shape = MaterialTheme.shapes.small)
+                .padding(vertical = 12.dp, horizontal = 16.dp),
+            decorationBox = { innerTextField ->
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    if (email.isEmpty()) {
+                        Text(
+                            text = "alamat email",
+                            color = Color.Gray.copy(alpha = 0.6f)
+                        )
+                    }
+                    innerTextField()
+                }
+            }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Password field
+        Text(
+            text = "Kata Sandi",
+            fontSize = 14.sp,
+            color = Color.Gray,
+            modifier = Modifier.fillMaxWidth()
+        )
+        BasicTextField(
+            value = password,
+            onValueChange = { password = it },
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .background(Color.White, shape = MaterialTheme.shapes.small)
+                .padding(vertical = 12.dp, horizontal = 16.dp),
+            decorationBox = { innerTextField ->
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    if (password.isEmpty()) {
+                        Text(
+                            text = "kata sandi",
+                            color = Color.Gray.copy(alpha = 0.6f)
+                        )
+                    }
+                    innerTextField()
+                }
+            }
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Tombol MASUK
+        Button(
+            onClick = { navController.navigate("home") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3C1732))
+        ) {
+            Text(
+                text = "MASUK",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Input kata sandi
-        Column {
-            Text(text = "Kata Sandi", fontSize = 14.sp, color = Color.Gray)
-            BasicTextField(
-                value = password,
-                onValueChange = { password = it },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .background(Color.White, shape = MaterialTheme.shapes.small)
-                    .padding(16.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Tombol masuk
+        // Tombol Masuk dengan Google
         Button(
-            onClick = { /* Handle login */ },
-            modifier = Modifier.fillMaxWidth(),
+            onClick = { navController.navigate("home") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3C1732))
         ) {
             Row(
@@ -125,26 +173,26 @@ fun LoginPage(navController: NavController = rememberNavController()) {
             }
         }
 
-
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = buildAnnotatedString {
-                append("Belum punya akun? ")
-                withStyle(
-                    style = SpanStyle(
-                        fontWeight = FontWeight.SemiBold,
-                        textDecoration = TextDecoration.Underline,
-                        color = Color.Black
-                    )
-                ) {
-                    append("Daftar sekarang")
-                }
-            },
-            fontSize = 14.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
+        // Text Daftar
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Belum punya akun? ",
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+            Text(
+                text = "Daftar sekarang",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF3C1732),
+                textDecoration = TextDecoration.Underline,
+            )
+        }
     }
 }
 

@@ -122,8 +122,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {
-                    // Handle registration logic
+                onClick = {navController.navigate("login")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
