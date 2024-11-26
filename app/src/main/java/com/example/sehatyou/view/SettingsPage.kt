@@ -127,7 +127,7 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                     SettingOption(
                         icon = painterResource(id = R.drawable.iconsmartwacth),
                         label = "SmartWatch",
-                        onClick = { navController.navigate("profile")}
+                        onClick = { navController.navigate("smartwatch")}
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
