@@ -1,4 +1,4 @@
-package com.example.sehatyou
+package com.example.sehatyou.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,7 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.sql.Time
+import com.example.sehatyou.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

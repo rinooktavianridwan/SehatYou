@@ -1,2 +1,2 @@
-package com.example.sehatyou
+package com.example.sehatyou.view
 
