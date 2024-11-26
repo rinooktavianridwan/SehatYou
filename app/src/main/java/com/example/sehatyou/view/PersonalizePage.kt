@@ -242,7 +242,9 @@ fun PersonalizePage(navController: NavController = rememberNavController()) {
                             .fillMaxWidth()
                             .height(45.dp)
                             .padding(start = 45.dp, top = 0.dp, end = 45.dp, bottom = 0.dp),
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            /*TODO*/
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.purple3C1732),
                             contentColor = colorResource(id = R.color.white)
