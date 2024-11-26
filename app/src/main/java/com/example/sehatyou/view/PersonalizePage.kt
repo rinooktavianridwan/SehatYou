@@ -97,7 +97,9 @@ fun PersonalizePage(navController: NavController = rememberNavController()) {
             modifier = Modifier.fillMaxSize()
         ) {
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.navigate("setting")
+                },
                 colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
                 modifier = Modifier
                     .size(60.dp, 60.dp)
@@ -243,7 +245,7 @@ fun PersonalizePage(navController: NavController = rememberNavController()) {
                             .height(45.dp)
                             .padding(start = 45.dp, top = 0.dp, end = 45.dp, bottom = 0.dp),
                         onClick = {
-                            /*TODO*/
+                            navController.navigate("personalize")
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.purple3C1732),
