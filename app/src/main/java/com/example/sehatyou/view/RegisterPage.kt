@@ -23,9 +23,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun RegisterPage() {
+fun RegisterPage(navController: NavController = rememberNavController()) {
     Box(
         modifier = Modifier
             .fillMaxSize()

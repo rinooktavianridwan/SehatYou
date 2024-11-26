@@ -42,11 +42,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PersonalizeBox() {
+fun PersonalizePage(navController: NavController = rememberNavController()) {
     var beratBadan = remember { mutableStateOf("55 kg") }
     var tinggiBadan = remember { mutableStateOf("174 cm") }
     var dateState = rememberDatePickerState()
@@ -266,5 +268,5 @@ fun PersonalizeBox() {
 @Preview
 @Composable
 fun PreviewPersonalizeBox() {
-    PersonalizeBox()
+    PersonalizePage()
 }

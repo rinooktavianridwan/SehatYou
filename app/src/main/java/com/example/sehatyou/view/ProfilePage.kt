@@ -36,10 +36,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 
 @Composable
-fun ProfileBox() {
+fun ProfilePage(navController: NavController = rememberNavController()) {
     var namaUser = remember { mutableStateOf("Anton") }
     var emailUser = remember { mutableStateOf("Anton@bletak.com") }
     var noHpUser = remember { mutableStateOf("08123456789") }
@@ -230,5 +232,5 @@ fun ProfileBox() {
 @Preview
 @Composable
 fun PreviewProfileBox() {
-    ProfileBox()
+    ProfilePage()
 }
