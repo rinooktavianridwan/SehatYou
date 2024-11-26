@@ -121,11 +121,13 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                 ) {
                     SettingOption(
                         icon = painterResource(id = R.drawable.iconprofile),
-                        label = "Profil"
+                        label = "Profil",
+                        onClick = { navController.navigate("profile")}
                     )
                     SettingOption(
                         icon = painterResource(id = R.drawable.iconsmartwacth),
-                        label = "SmartWatch"
+                        label = "SmartWatch",
+                        onClick = { navController.navigate("profile")}
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
@@ -155,7 +157,9 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                     )
                     SettingOption(
                         icon = painterResource(id = R.drawable.iconlogout),
-                        label = "Log Out"
+                        label = "Log Out",
+                        onClick = { navController.navigate("login")}
+
                     )
                 }
             }
