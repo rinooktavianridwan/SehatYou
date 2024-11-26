@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sehatyou.R
 
-@OptIn(ExperimentalMaterial3Api::class) // Tandai API Material 3 yang eksperimental
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackClick: () -> Unit) {
     val title = remember { mutableStateOf("") }
@@ -36,15 +36,11 @@ fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackC
                 style = MaterialTheme.typography.headlineMedium.copy(fontSize = 40.sp, fontWeight = FontWeight.Bold),
                 color = Color(0xFF3E0028),
             )
-//            IconButton(onClick = { onBackClick() }) {
             Image(
-//                    imageVector = Icons.Default.ArrowBack, // Gunakan ikon bawaan
                 painter = painterResource(id = R.drawable.icon_back),
                 contentDescription = "Back",
                 modifier = Modifier.size(40.dp)
-//                    tint = Color(0xFF3E0028)
             )
-//            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -54,13 +50,12 @@ fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackC
             value = title.value,
             onValueChange = { title.value = it },
             placeholder = { Text("Judul", color = Color(0xFF3E0028)) },
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color(0xFFFFE0B2),
-                focusedTextColor = Color(0xFF3E0028),  // Warna teks saat fokus
-                unfocusedTextColor = Color(0xFF3E0028), // Warna teks saat tidak fokus
-                cursorColor = Color(0xFF3E0028),
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color(0xFFFFE0B2),
+                unfocusedContainerColor = Color(0xFFFFE0B2),
+                focusedTextColor = Color(0xFF3E0028),
+                unfocusedTextColor = Color(0xFF3E0028),
+                cursorColor = Color(0xFF3E0028)
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -75,13 +70,12 @@ fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackC
             value = description.value,
             onValueChange = { description.value = it },
             placeholder = { Text("Deskripsi", color = Color(0xFF3E0028)) },
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color(0xFFFFE0B2),
-                focusedTextColor = Color(0xFF3E0028),  // Warna teks saat fokus
-                unfocusedTextColor = Color(0xFF3E0028), // Warna teks saat tidak fokus
-                cursorColor = Color(0xFF3E0028),
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color(0xFFFFE0B2),
+                unfocusedContainerColor = Color(0xFFFFE0B2),
+                focusedTextColor = Color(0xFF3E0028),
+                unfocusedTextColor = Color(0xFF3E0028),
+                cursorColor = Color(0xFF3E0028)
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,7 +95,6 @@ fun InputDiaryScreen(onSaveClick: () -> Unit, onCancelClick: () -> Unit, onBackC
             Image(
                 painter = painterResource(id = R.drawable.icon_mood),
                 contentDescription = "Mood",
-//                modifier = Modifier.fillMaxWidth()
                 modifier = Modifier
                     .width(400.dp)
                     .height(65.dp)

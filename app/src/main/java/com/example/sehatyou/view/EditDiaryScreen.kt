@@ -106,13 +106,13 @@ fun EditDiaryScreen(onEditClick: () -> Unit, onBackClick: () -> Unit, onAddClick
             contentAlignment = Alignment.BottomEnd,
             modifier = Modifier.fillMaxSize()
         ) {
-            IconButton(onClick = { onAddClick() }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_plus), // Icon add
-                    contentDescription = "Add",
-                    modifier = Modifier.size(60.dp)
-                )
-            }
+//            IconButton(onClick = { onAddClick() }) {
+            Image(
+                painter = painterResource(id = R.drawable.icon_plus), // Icon add
+                contentDescription = "Add",
+                modifier = Modifier.size(60.dp)
+            )
+//        }
         }
     }
 }
