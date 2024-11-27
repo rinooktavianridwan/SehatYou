@@ -92,27 +92,27 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
         }
     }
 
+    val systemAI = "Kamu adalah SehatBot, sebuah bot yang dibuat untuk aplikasi SehatYou. SehatYou adalah aplikasi mobile yang mengintegrasikan data kesehatan fisik dari smartwatch dan data mental well-being dari catatan harian (diary). Tujuan kamu adalah memberikan saran kegiatan yang relevan dan bermanfaat kepada user berdasarkan data tersebut.\n" +
+            "\n" +
+            "Berikut adalah aturan yang harus kamu ikuti:\n" +
+            "1. Kamu akan diberikan informasi berupa diary user dan data smartwatch user (jika tersedia).\n" +
+            "2. Jika data smartwatch tidak tersedia, kamu tetap harus memberikan saran yang relevan berdasarkan diary saja.\n" +
+            "3. Output harus berupa saran kegiatan singkat dalam bahasa Indonesia, dengan panjang maksimal 25 kata.\n" +
+            "4. Output harus berupa kalimat langsung yang praktis dan actionable (dapat langsung dilakukan oleh user).\n" +
+            "5. Jika ini bukan permintaan pertama, sistem akan menyertakan saran sebelumnya agar kamu dapat memberikan saran baru yang melengkapi saran sebelumnya tanpa mengulanginya.\n" +
+            "6. Pertimbangkan konteks waktu (pagi, siang, malam) dan mood user yang tergambar dalam diary untuk membuat saran lebih personal.\n" +
+            "7. Jika diary menunjukkan suasana hati negatif (stres, sedih), utamakan saran untuk manajemen stres atau aktivitas relaksasi.\n" +
+            "8. Jika diary menunjukkan suasana hati positif (bahagia, produktif), berikan saran untuk mempertahankan atau meningkatkan suasana tersebut.\n" +
+            "\n" +
+            "Tugasmu adalah memberikan saran kegiatan yang relevan dan terarah untuk user."
+
     // Fungsi untuk mendapatkan saran
     fun fetchSuggestion() {
         coroutineScope.launch {
             isLoading.value = true
             try {
                 val descriptionMessages =
-                    listOf(Message("user", "Kamu adalah SehatBot, sebuah bot yang dibuat untuk aplikasi SehatYou. SehatYou adalah aplikasi mobile yang mengintegrasikan data kesehatan fisik dari smartwatch dan data mental well-being dari catatan harian (diary). Tujuan kamu adalah memberikan saran kegiatan yang relevan dan bermanfaat kepada user berdasarkan data tersebut.\n" +
-                            "\n" +
-                            "Berikut adalah aturan yang harus kamu ikuti:\n" +
-                            "1. Kamu akan diberikan informasi berupa diary user dan data smartwatch user (jika tersedia).\n" +
-                            "2. Jika data smartwatch tidak tersedia, kamu tetap harus memberikan saran yang relevan berdasarkan diary saja.\n" +
-                            "3. Output harus berupa saran kegiatan singkat dalam *bahasa Indonesia, dengan panjang maksimal **25 kata*.\n" +
-                            "4. Output harus berupa kalimat langsung yang praktis dan actionable (dapat langsung dilakukan oleh user).\n" +
-                            "5. Jika ini bukan permintaan pertama, sistem akan menyertakan saran sebelumnya agar kamu dapat memberikan saran baru yang melengkapi saran sebelumnya tanpa mengulanginya.\n" +
-                            "6. Pertimbangkan konteks waktu (pagi, siang, malam) dan mood user yang tergambar dalam diary untuk membuat saran lebih personal.\n" +
-                            "7. Jika diary menunjukkan suasana hati negatif (stres, sedih), utamakan saran untuk manajemen stres atau aktivitas relaksasi.\n" +
-                            "8. Jika diary menunjukkan suasana hati positif (bahagia, produktif), berikan saran untuk mempertahankan atau meningkatkan suasana tersebut.\n" +
-                            "\n" +
-                            "Tugasmu adalah memberikan saran kegiatan yang relevan dan terarah untuk user.\n" +
-                            "\n" +
-                            "Ini adalah user dengan nama Vgte, dan ini adalah diary milik nya\n" +
+                    listOf(Message("user", "\"$systemAI\"\nIni adalah user dengan nama Vgte, dan ini adalah diary milik nya\n" +
                             "\n" +
                             "19/10/2024\n" +
                             "Pagi ini aku bangun lebih awal dari biasanya. Alarm berbunyi pukul 5 pagi, dan aku langsung bersiap. Ransel sudah kusiapkan sejak semalam—cukup ringan karena aku tak ingin ribet selama perjalanan. Setelah sarapan sederhana dengan nasi goreng dan teh manis buatan ibu, aku pamit. Rasanya campur aduk: senang, bersemangat, tapi juga sedikit gugup. Ini pertama kalinya aku ke Jepang, dan aku tak sabar melihat Kota Hakone yang terkenal dengan pemandangan Gunung Fuji-nya.\n" +
@@ -150,10 +150,10 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                 val titleMessages = listOf(
                     Message(
                         "user",
-                        "\"$descriptionText\"\nBerdasarkan saran yang kamu berikan di bawah ini, aku ingin kamu menjadikannya judul kegiatan untuk user. Judul ini harus terdiri dari maksimal 3 kata dalam bahasa Indonesia dan relevan dengan inti saran. Jangan tambahkan kata lain. "
+                        "\"$systemAI\"\nBerdasarkan saran yang kamu berikan di bawah ini, aku ingin kamu menjadikannya judul kegiatan untuk user. Judul ini harus terdiri dari maksimal 3 kata dalam bahasa Indonesia dan relevan dengan inti saran. Jangan tambahkan kata lain.\n \"$descriptionText\"\n"
                     )
                 )
-                val titleRequest = ChatRequest("llama3-8b-8192", titleMessages)
+                val titleRequest = ChatRequest("llama-3.1-70b-versatile", titleMessages)
                 val titleResponse = withContext(Dispatchers.IO) {
                     GroqApiClient.api.getChatResponse(titleRequest)
                 }
