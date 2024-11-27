@@ -7,14 +7,27 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sehatyou.model.SehatYouModel
+import com.example.sehatyou.roomdb.OfflineSehatYouRepository
+import com.example.sehatyou.roomdb.SehatYouDatabase
 import com.example.sehatyou.ui.theme.SehatYouTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var viewModel: SehatYouModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Inisialisasi ViewModel secara manual
+        val sehatYouRepository = OfflineSehatYouRepository(
+            SehatYouDatabase.getDatabase(applicationContext).suggestDao()
+        )
+        viewModel = ViewModelProvider(
+            this,
+            SehatYouViewModelFactory(sehatYouRepository)
+        )[SehatYouModel::class.java]
         enableEdgeToEdge()
         setContent {
             SehatYouTheme {
@@ -24,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     composable("setting") { SettingsPage(navController) }
                     composable("profile") { ProfilePage(navController) }
                     composable("personalize") { PersonalizePage(navController) }
-                    composable("suggest") { SuggestPage(navController) }
+                    composable("suggest") { SuggestPage(navController,viewModel) }
                     composable("register") { RegisterPage(navController) }
                     composable("login") { LoginPage(navController) }
                     composable("smartwatch") {SmartWatchPage(navController)  }
