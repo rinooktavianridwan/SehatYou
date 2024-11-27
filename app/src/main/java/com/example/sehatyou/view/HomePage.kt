@@ -41,6 +41,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -222,9 +223,10 @@ fun HomePage(navController: NavController = rememberNavController()) {
                     Spacer(modifier = Modifier.height(16.dp))
                     SuggestionCard(
                         title = "Membaca Buku",
-                        deskripsi = "Luangkan waktu untuk membaca buku yang sudah lama ingin kamu baca. Membaca bisa memberikan wawasan baru.",
+                        deskripsi = "Luangkan waktu untuk membaca buku yang sudah lama ingin kamu baca. Membaca bisa memberikan wawasan baru.Luangkan waktu untuk membaca buku yang sudah lama ingin kamu baca. Membaca bisa memberikan wawasan baru.",
                         tanggal = "23 Oktober 2024",
                         waktu = "08:15 a.m.",
+                        onClick = {}
                     )
                 }
             }
@@ -233,14 +235,21 @@ fun HomePage(navController: NavController = rememberNavController()) {
 }
 
 @Composable
-fun SuggestionCard(title: String, deskripsi: String, tanggal: String, waktu: String) {
+fun SuggestionCard(
+    title: String,
+    deskripsi: String,
+    tanggal: String,
+    waktu: String,
+    onClick: () -> Unit
+) {
     var isStarred by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
-            .padding(bottom = 0.dp),
+            .padding(bottom = 0.dp)
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(Color.White),
     ) {
         Column(
@@ -287,12 +296,20 @@ fun SuggestionCard(title: String, deskripsi: String, tanggal: String, waktu: Str
                         )
                     }
                 }
-
             }
-            Text(
-                text = deskripsi,
-                fontSize = 14.sp,
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .padding(top = 8.dp)
+            ) {
+                Text(
+                    text = deskripsi,
+                    fontSize = 14.sp,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row(
