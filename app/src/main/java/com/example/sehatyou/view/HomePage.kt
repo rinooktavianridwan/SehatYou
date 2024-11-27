@@ -1,57 +1,61 @@
 package com.example.sehatyou.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
+import com.example.sehatyou.model.SehatYouModel
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun HomePage(navController: NavController = rememberNavController()) {
+fun HomePage(navController: NavController = rememberNavController(), viewModel: SehatYouModel) {
+    val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
+    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a"))
+    val savedSuggestions by viewModel.getAllTasks.collectAsState(initial = emptyList())
+    val sortedSuggestions = savedSuggestions.sortedWith(
+        compareByDescending {
+            LocalDateTime.parse(
+                "${it.date} ${it.time}",
+                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm")
+            )
+        }
+    )
+    val latestSuggestion = sortedSuggestions.firstOrNull()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -221,179 +225,35 @@ fun HomePage(navController: NavController = rememberNavController()) {
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    SuggestionCard(
-                        title = "Membaca Buku",
-                        deskripsi = "Luangkan waktu untuk membaca buku yang sudah lama ingin kamu baca. Membaca bisa memberikan wawasan baru.Luangkan waktu untuk membaca buku yang sudah lama ingin kamu baca. Membaca bisa memberikan wawasan baru.",
-                        tanggal = "23 Oktober 2024",
-                        waktu = "08:15 a.m.",
-                        onClick = {}
-                    )
-                }
-            }
-        }
-    }
-}
 
-@Composable
-fun SuggestionCard(
-    title: String,
-    deskripsi: String,
-    tanggal: String,
-    waktu: String,
-    onClick: () -> Unit
-) {
-    var isStarred by remember { mutableStateOf(false) }
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
-            .padding(bottom = 0.dp)
-            .clickable { onClick() },
-        colors = CardDefaults.cardColors(Color.White),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp, 8.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = title,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .background(colorResource(id = R.color.DDE7FF), CircleShape)
-                ) {
-                    // Bintang untuk border
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = null,
-                        tint = Color.Black,
-                        modifier = Modifier
-                            .size(32.dp)
-                    )
-                    //Bintang
-                    IconButton(
-                        onClick = { isStarred = !isStarred },
-                        modifier = Modifier.size(40.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = "Favorite",
-                            tint = if (isStarred) Color.Yellow else colorResource(id = R.color.DDE7FF),
-                            modifier = Modifier.size(24.dp)
+                    if (latestSuggestion != null) {
+                        // Jika ada data, tampilkan SuggestionCard dengan data terbaru
+                        SuggestionCard(
+                            title = latestSuggestion.title,
+                            deskripsi = latestSuggestion.descripsion,
+                            tanggal = latestSuggestion.date,
+                            waktu = latestSuggestion.time,
+                            isStarred = latestSuggestion.favorite,
+                            onClick = { /* Navigasi atau aksi */ },
+                            onStarToggle = { /* Toggle favorite */ }
+                        )
+                    } else {
+                        // Jika null, tampilkan SuggestionCard default
+                        SuggestionCard(
+                            title = "Saran Belum Tersedia",
+                            deskripsi = "Tambahkan saran sendiri pada halaman Saran",
+                            tanggal = currentDate,
+                            waktu = currentTime,
+                            isStarred = false,
+                            onClick = { /* Navigasi atau aksi */ },
+                            onStarToggle = {}
                         )
                     }
+
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .padding(top = 8.dp)
-            ) {
-                Text(
-                    text = deskripsi,
-                    fontSize = 14.sp,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .border(1.dp, Color.Gray, shape = RoundedCornerShape(0.dp, 0.dp, 16.dp, 16.dp))
-                .padding(0.dp)
-                .height(40.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically),
-                text = tanggal,
-                fontSize = 12.sp,
-                textAlign = TextAlign.Center
-            )
-            Box(
-                modifier = Modifier
-                    .width(1.dp)
-                    .fillMaxHeight()
-                    .background(Color.Gray)
-            )
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically),
-                text = waktu,
-                fontSize = 12.sp,
-                textAlign = TextAlign.Center
-            )
-        }
-
-    }
-}
-
-@Composable
-fun ActivityCard(title: String, subtitle: String, icon: Int, backgroundColor: Color) {
-    Card(
-        modifier = Modifier
-            .size(160.dp, 80.dp)
-            .padding(8.dp)
-            .shadow(
-                elevation = 8.dp,
-                shape = RoundedCornerShape(16.dp),
-                clip = false
-            )
-            .background(Color.White, shape = RoundedCornerShape(16.dp)),
-        shape = RoundedCornerShape(16.dp),
-
-        ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor)
-                .padding(8.dp, 0.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(modifier = Modifier.width(60.dp)) {
-                Text(
-                    text = title,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colorResource(id = R.color.F7B087)
-                )
-                Text(text = subtitle, fontSize = 12.sp, color = colorResource(id = R.color.F7B087))
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = title,
-                modifier = Modifier.size(60.dp),
-                tint = Color.Unspecified
-            )
         }
     }
 }
 
-@Preview
-@Composable
-fun HomePagePreview() {
-    HomePage()
-}
+

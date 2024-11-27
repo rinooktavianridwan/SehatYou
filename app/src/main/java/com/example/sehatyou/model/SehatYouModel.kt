@@ -10,13 +10,19 @@ import kotlinx.coroutines.launch
 class SehatYouModel(private val sehatYouRepository: SehatYouRepository) : ViewModel() {
     val getAllTasks: Flow<List<SuggestEntity>> = sehatYouRepository.getAll()
 
-    fun addTask(suggestEntity: SuggestEntity) {
+    fun add(suggestEntity: SuggestEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             sehatYouRepository.insert(suggestEntity)
         }
     }
 
-    fun deleteTask(suggestEntity: SuggestEntity) {
+    fun update(suggestEntity: SuggestEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            sehatYouRepository.update(suggestEntity)
+        }
+    }
+
+    fun delete(suggestEntity: SuggestEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             sehatYouRepository.delete(suggestEntity)
         }

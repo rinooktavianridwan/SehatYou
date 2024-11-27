@@ -8,5 +8,7 @@ class OfflineSehatYouRepository(private val suggestDao: SuggestDao) : SehatYouRe
 
     override suspend fun insert(suggestEntity: SuggestEntity) = suggestDao.insert(suggestEntity)
 
+    override suspend fun update(suggestEntity: SuggestEntity) = suggestDao.update(suggestEntity)
+
     override suspend fun delete(suggestEntity: SuggestEntity) = suggestDao.delete(suggestEntity)
 }

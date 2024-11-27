@@ -9,5 +9,7 @@ interface SehatYouRepository {
 
     suspend fun insert(toDoList: SuggestEntity)
 
+    suspend fun update(toDoList: SuggestEntity)
+
     suspend fun delete(toDoList: SuggestEntity)
 }

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "suggest_table")
-class SuggestEntity (
+data class SuggestEntity (
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     var title: String,

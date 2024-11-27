@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.sehatyou.model.SuggestEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -12,6 +13,9 @@ import kotlinx.coroutines.flow.Flow
 interface SuggestDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(Suggest: SuggestEntity)
+
+    @Update
+    suspend fun update(suggestion: SuggestEntity)
 
     @Delete
     suspend fun delete(Suggest: SuggestEntity)
