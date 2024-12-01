@@ -5,11 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.GroqAI.ChatRequest
@@ -285,8 +288,8 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                     Spacer(modifier = Modifier.height(16.dp))
                     LazyColumn(
                         modifier = Modifier
+                            .weight(1f)
                             .fillMaxWidth()
-                            .height(600.dp)
                     ) {
                         items(sortedSuggestions) { item ->
                             SuggestionCard(
@@ -306,10 +309,16 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                             Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Button(onClick = { fetchSuggestion() }) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = { fetchSuggestion() },
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(bottom = 32.dp) // Menambahkan padding bawah
+                    ) {
                         Text(text = "Dapatkan Saran")
                     }
+
                 }
             }
         }
