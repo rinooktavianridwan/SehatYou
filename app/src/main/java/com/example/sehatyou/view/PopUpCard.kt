@@ -65,9 +65,18 @@ fun SuggestionDetailPopup(
                             .size(32.dp)
                             .background(colorResource(id = R.color.DDE7FF), CircleShape)
                     ) {
+                        // Bintang untuk border
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null,
+                            tint = Color.Black,
+                            modifier = Modifier
+                                .size(32.dp)
+                        )
+                        //Bintang
                         IconButton(
-                            onClick = { onStarToggle() }, // Memanggil fungsi toggle bintang
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(40.dp),
+                            onClick = { onStarToggle() }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Star,

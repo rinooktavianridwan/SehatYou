@@ -21,10 +21,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -193,6 +200,133 @@ fun ActivityCard(title: String, subtitle: String, icon: Int, backgroundColor: Co
                 contentDescription = title,
                 modifier = Modifier.size(60.dp),
                 tint = Color.Unspecified
+            )
+        }
+    }
+}
+
+@Composable
+fun DiaryCard(
+    date: String,
+    title: String,
+    description: String,
+    isFavorite: Boolean,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onFavoriteClick: () -> Unit
+) {
+    var showMenu by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF3C1732))
+    ) {
+        Column(modifier = Modifier.padding(16.dp).height(160.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        painter = if (isFavorite) painterResource(id = R.drawable.icon_star) else painterResource(
+                            id = R.drawable.icon_unstar
+                        ),
+                        contentDescription = "Favorite",
+                        tint = Color(0xFFFFFFFF),
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickable { onFavoriteClick() }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .background(
+                                color = colorResource(id = R.color.F7B087),
+                                shape = MaterialTheme.shapes.small
+                            )
+                            .padding(4.dp)
+
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.icon_clock), // Icon clock
+                            contentDescription = "Clock",
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = date,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(0xFFFFFFFF)
+                        )
+                    }
+                }
+
+                Box {
+                    // IconButton (titik tiga)
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.icon_ellipsis),
+                            contentDescription = "Options",
+                            tint = Color(0xFFFFFFFF),
+                            modifier = Modifier.size(15.dp)
+                        )
+                    }
+
+                    // DropdownMenu (muncul tepat di bawah ikon)
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false },
+                        modifier = Modifier.background(color = colorResource(id = R.color.F7B087))
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Edit") },
+                            onClick = {
+                                onEditClick()
+                                showMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = painterResource(id = R.drawable.icon_edit),
+                                    contentDescription = "Edit"
+                                )
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Hapus") },
+                            onClick = {
+                                onDeleteClick()
+                                showMenu = false
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = painterResource(id = R.drawable.icon_delete),
+                                    contentDescription = "Delete"
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
+                color = Color(0xFFFFFFFF)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFFFFFFFF),
+                maxLines = 3
             )
         }
     }

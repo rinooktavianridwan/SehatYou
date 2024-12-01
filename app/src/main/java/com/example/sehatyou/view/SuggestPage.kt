@@ -63,12 +63,8 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
     val isLoading = remember { mutableStateOf(false) }
     val title = remember { mutableStateOf("Menunggu judul...") }
 
-    // State untuk popup
     val isPopupVisible = remember { mutableStateOf(false) }
-
-    // Mendapatkan CoroutineScope untuk peluncuran coroutine
     val coroutineScope = rememberCoroutineScope()
-
     val savedSuggestions by viewModel.getAllTasks.collectAsState(initial = emptyList())
 
     val sortedSuggestions = savedSuggestions.sortedWith(
