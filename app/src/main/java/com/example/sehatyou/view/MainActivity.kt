@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sehatyou.RegisterPage
 import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouModel
 import com.example.sehatyou.roomdb.OfflineSehatYouRepository

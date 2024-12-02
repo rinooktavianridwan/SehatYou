@@ -1,4 +1,7 @@
-package com.example.sehatyou.view
+package com.example.sehatyou
+
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,16 +29,20 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun RegisterPage(navController: NavController = rememberNavController()) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(Color(0xFF3C1732),Color(0xFFE7DFDC)),
-                    startY = 0f, // Start of gradient at the top
+                    colors = listOf(Color(0xFF3C1732), Color(0xFFE7DFDC)),
+                    startY = 0f,
                     endY = Float.POSITIVE_INFINITY
                 )
             )
@@ -122,7 +130,17 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {navController.navigate("login")
+                onClick = {
+                    // Validasi jika email dan password valid dan jika password cocok
+                    if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                        Toast.makeText(context, "Harap lengkapi semua kolom", Toast.LENGTH_SHORT).show()
+                    } else if (!acceptTerms) {
+                        Toast.makeText(context, "Harap setujui syarat dan ketentuan", Toast.LENGTH_SHORT).show()
+                    } else if (password == rePassword) {
+                        registerUser(email, password, fullName, context, navController)
+                    } else {
+                        Toast.makeText(context, "Password tidak cocok", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -153,7 +171,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "syarat",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* nnti ditambah */ }
+                    modifier = Modifier.clickable { /* Tambahkan navigasi ke halaman syarat dan ketentuan */ }
                 )
                 Text(
                     text = " dan ",
@@ -163,7 +181,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "ketentuan layanan.",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* nanti ditambah */ }
+                    modifier = Modifier.clickable { /* Tambahkan navigasi ke halaman ketentuan layanan */ }
                 )
             }
 
@@ -182,9 +200,36 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     modifier = Modifier.clickable { navController.navigate("login") }
                 )
             }
-
         }
     }
+}
+
+private fun registerUser(email: String, password: String, fullName: String, context: Context, navController: NavController) {
+    val auth = FirebaseAuth.getInstance()
+    auth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // Pendaftaran berhasil
+                val user = auth.currentUser
+                val db = FirebaseFirestore.getInstance()
+                val userData = hashMapOf(
+                    "fullName" to fullName,
+                    "email" to email
+                )
+                db.collection("users").document(user!!.uid)
+                    .set(userData)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show()
+                        navController.navigate("login") // Arahkan ke halaman login setelah berhasil
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Gagal menyimpan data", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                // Pendaftaran gagal
+                Toast.makeText(context, "Pendaftaran gagal: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
 }
 
 @Preview(showBackground = true)
