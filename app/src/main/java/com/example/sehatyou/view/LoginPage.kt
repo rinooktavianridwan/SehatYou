@@ -1,5 +1,8 @@
 package com.example.sehatyou.view
 
+import android.app.Activity
+import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,27 +12,44 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
 fun LoginPage(navController: NavController = rememberNavController()) {
+    val context = LocalContext.current
+    val activity = context as Activity
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
+    var auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    // Google Sign-In Client
+    val googleSignInClient = remember {
+        GoogleSignIn.getClient(
+            context,
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -52,11 +72,8 @@ fun LoginPage(navController: NavController = rememberNavController()) {
         Text(
             text = "Masuk",
             fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
             color = Color(0xFF3C1732),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 4.dp)
+            modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
         )
 
         Text(
@@ -68,7 +85,7 @@ fun LoginPage(navController: NavController = rememberNavController()) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Email field
+        // Email Field
         Text(
             text = "Alamat Email",
             fontSize = 14.sp,
@@ -82,23 +99,12 @@ fun LoginPage(navController: NavController = rememberNavController()) {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
                 .background(Color.White, shape = MaterialTheme.shapes.small)
-                .padding(vertical = 12.dp, horizontal = 16.dp),
-            decorationBox = { innerTextField ->
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    if (email.isEmpty()) {
-                        Text(
-                            text = "alamat email",
-                            color = Color.Gray.copy(alpha = 0.6f)
-                        )
-                    }
-                    innerTextField()
-                }
-            }
+                .padding(vertical = 12.dp, horizontal = 16.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Password field
+        // Password Field
         Text(
             text = "Kata Sandi",
             fontSize = 14.sp,
@@ -113,57 +119,57 @@ fun LoginPage(navController: NavController = rememberNavController()) {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
                 .background(Color.White, shape = MaterialTheme.shapes.small)
-                .padding(vertical = 12.dp, horizontal = 16.dp),
-            decorationBox = { innerTextField ->
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    if (password.isEmpty()) {
-                        Text(
-                            text = "kata sandi",
-                            color = Color.Gray.copy(alpha = 0.6f)
-                        )
-                    }
-                    innerTextField()
-                }
-            }
+                .padding(vertical = 12.dp, horizontal = 16.dp)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        // Tombol MASUK
+        // Error Message
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                fontSize = 14.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Login Button
         Button(
-            onClick = { navController.navigate("home") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
+            onClick = {
+                if (email.isEmpty() || password.isEmpty()) {
+                    errorMessage = "Email dan kata sandi harus diisi!"
+                } else {
+                    auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                navController.navigate("home")
+                            } else {
+                                errorMessage = "Login gagal: ${task.exception?.message}"
+                            }
+                        }
+                }
+            },
+            modifier = Modifier.fillMaxWidth().height(48.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3C1732))
         ) {
-            Text(
-                text = "MASUK",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+            Text(text = "MASUK", fontSize = 16.sp, color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Tombol Masuk dengan Google
+        // Google Sign-In Button
         Button(
-            onClick = { navController.navigate("home") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
+            onClick = {
+                val signInIntent = googleSignInClient.signInIntent
+                activity.startActivityForResult(signInIntent, 9001)
+            },
+            modifier = Modifier.fillMaxWidth().height(48.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3C1732))
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Masuk dengan",
-                    color = Color.White,
-                    fontSize = 16.sp
-                )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "Masuk dengan", color = Color.White, fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(8.dp))
                 Image(
                     painter = painterResource(id = R.drawable.gmail),
@@ -175,29 +181,21 @@ fun LoginPage(navController: NavController = rememberNavController()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Text Daftar
+        // Register Text
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Belum punya akun? ",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
+            Text(text = "Belum punya akun? ", fontSize = 14.sp, color = Color.Gray)
             Text(
                 text = "Daftar sekarang",
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
                 color = Color(0xFF3C1732),
                 textDecoration = TextDecoration.Underline,
+                modifier = Modifier.clickable {
+                    navController.navigate("register")
+                }
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginPagePreview() {
-    LoginPage()
 }
