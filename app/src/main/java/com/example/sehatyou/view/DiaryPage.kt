@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,12 +40,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 import com.example.sehatyou.model.DiaryEntity
-import com.example.sehatyou.model.SehatYouModel
+import com.example.sehatyou.model.SehatYouRoomModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun DiaryPage(navController: NavController = rememberNavController(), viewModel: SehatYouModel) {
+fun DiaryPage(navController: NavController = rememberNavController(), viewModel: SehatYouRoomModel) {
     var searchText by remember { mutableStateOf("") }
     val diaryList by viewModel.searchResults.collectAsState(initial = emptyList())
 

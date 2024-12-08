@@ -18,7 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.RegisterPage
 import com.example.sehatyou.model.DiaryEntity
-import com.example.sehatyou.model.SehatYouModel
+import com.example.sehatyou.model.SehatYouRoomModel
 import com.example.sehatyou.roomdb.OfflineSehatYouRepository
 import com.example.sehatyou.roomdb.SehatYouDatabase
 import com.example.sehatyou.ui.theme.SehatYouTheme
@@ -27,7 +27,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
-    private lateinit var viewModel: SehatYouModel
+    private lateinit var viewModel: SehatYouRoomModel
     @SuppressLint("UnrememberedMutableInteractionSource")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
         viewModel = ViewModelProvider(
             this,
             SehatYouViewModelFactory(sehatYouRepository)
-        )[SehatYouModel::class.java]
+        )[SehatYouRoomModel::class.java]
         enableEdgeToEdge()
         setContent {
             SehatYouTheme {

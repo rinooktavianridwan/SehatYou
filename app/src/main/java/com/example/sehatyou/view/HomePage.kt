@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
-import com.example.sehatyou.model.SehatYouModel
+import com.example.sehatyou.model.SehatYouRoomModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -43,7 +43,7 @@ import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun HomePage(navController: NavController = rememberNavController(), viewModel: SehatYouModel) {
+fun HomePage(navController: NavController = rememberNavController(), viewModel: SehatYouRoomModel) {
     val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
     val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a"))
     val savedSuggestions by viewModel.getAllTasks.collectAsState(initial = emptyList())

@@ -5,13 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,14 +39,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.GroqAI.ChatRequest
 import com.example.sehatyou.GroqAI.GroqApiClient
 import com.example.sehatyou.GroqAI.Message
 import com.example.sehatyou.R
-import com.example.sehatyou.model.SehatYouModel
+import com.example.sehatyou.model.SehatYouRoomModel
 import com.example.sehatyou.model.SuggestEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,7 +55,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun SuggestPage(navController: NavController = rememberNavController(), viewModel: SehatYouModel) {
+fun SuggestPage(navController: NavController = rememberNavController(), viewModel: SehatYouRoomModel) {
     var tanggal = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
     val suggestion = remember { mutableStateOf("Menunggu saran...") }
     val suggestionDate = remember { mutableStateOf("") }

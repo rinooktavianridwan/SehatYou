@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class SehatYouModel(private val sehatYouRepository: SehatYouRepository) : ViewModel() {
+class SehatYouRoomModel(private val sehatYouRepository: SehatYouRepository) : ViewModel() {
     val getAllTasks: Flow<List<SuggestEntity>> = sehatYouRepository.getAll()
 
     fun add(suggestEntity: SuggestEntity) {

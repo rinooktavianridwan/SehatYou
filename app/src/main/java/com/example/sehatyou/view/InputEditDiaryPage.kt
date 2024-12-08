@@ -36,13 +36,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 import com.example.sehatyou.model.DiaryEntity
-import com.example.sehatyou.model.SehatYouModel
+import com.example.sehatyou.model.SehatYouRoomModel
 
 
 @Composable
 fun InputEditDiaryPage(
     navController: NavController = rememberNavController(),
-    viewModel: SehatYouModel,
+    viewModel: SehatYouRoomModel,
     diary: DiaryEntity
 ) {
     val title = remember { mutableStateOf(diary.title) }
