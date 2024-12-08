@@ -1,6 +1,10 @@
 package com.example.sehatyou.view
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
@@ -22,6 +27,7 @@ import com.example.sehatyou.model.SehatYouRoomModel
 import com.example.sehatyou.roomdb.OfflineSehatYouRepository
 import com.example.sehatyou.roomdb.SehatYouDatabase
 import com.example.sehatyou.ui.theme.SehatYouTheme
+import com.example.sehatyou.utils.NotificationScheduler
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -31,6 +37,8 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnrememberedMutableInteractionSource")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createNotificationChannel()
+        NotificationScheduler.scheduleNotifications(this, 288)
         // Inisialisasi ViewModel secara manual
         val sehatYouRepository = OfflineSehatYouRepository(
             SehatYouDatabase.getDatabase(applicationContext).suggestDao(),
@@ -97,6 +105,19 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Suggest Notif"
+            val descriptionText = "Notifikasi untuk saran"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("1", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 }

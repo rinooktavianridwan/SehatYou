@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -52,6 +53,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 import com.example.sehatyou.ui.theme.SehatYouTheme
+import com.example.sehatyou.utils.NotificationScheduler
 
 @Composable
 fun SettingsPage(navController: NavController = rememberNavController()) {
@@ -182,17 +184,22 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
     }
     // Dialog untuk memilih interval notifikasi
     if (showDialogNotifikasi) {
+        val context = LocalContext.current
+
         NotificationIntervalDialog(
             interval = notificationInterval,
             onDismiss = { showDialogNotifikasi = false },
-            onSave = {
-                showDialogNotifikasi = false
-            },
             onIntervalChanged = { newInterval ->
                 notificationInterval = newInterval
+            },
+            onSave = {
+                showDialogNotifikasi = false
+                val numNotifications = notificationInterval.toIntOrNull() ?: 1
+                NotificationScheduler.scheduleNotifications(context, numNotifications) // Menjadwalkan ulang dengan nilai baru
             }
         )
     }
+
 }
 
 @Composable
