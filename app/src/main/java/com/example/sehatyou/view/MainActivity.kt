@@ -1,11 +1,14 @@
 package com.example.sehatyou.view
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,10 +20,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sehatyou.R
 import com.example.sehatyou.RegisterPage
 import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouRoomModel
@@ -34,9 +40,45 @@ import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: SehatYouRoomModel
+    var isanimation = false
     @SuppressLint("UnrememberedMutableInteractionSource")
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            val iconView = splashScreenView.iconView as? ImageView
+            if (iconView != null) {
+                iconView.setImageResource(R.drawable.splash)
+                val slideAnimation = ObjectAnimator.ofFloat(iconView, "translationY", -300f, 0f)
+                slideAnimation.duration = 800
+                val bounce1 = ObjectAnimator.ofFloat(iconView, "translationY", 0f, -100f)
+                bounce1.duration = 500
+                val bounceBack1 = ObjectAnimator.ofFloat(iconView, "translationY", -100f, 0f)
+                bounceBack1.duration = 500
+                val bounce2 = ObjectAnimator.ofFloat(iconView, "translationY", 0f, -50f)
+                bounce2.duration = 400
+                val bounceBack2 = ObjectAnimator.ofFloat(iconView, "translationY", -50f, 0f)
+                bounceBack2.duration = 400
+                val animatorSet = AnimatorSet()
+                animatorSet.playSequentially(
+                    slideAnimation,
+                    bounce1,
+                    bounceBack1,
+                    bounce2,
+                    bounceBack2
+                )
+                animatorSet.doOnEnd {
+                    iconView.postDelayed({
+                        isanimation = true
+                        splashScreenView.remove()
+                    }, 1000)
+                }
+                animatorSet.start()
+            } else {
+                isanimation = true
+                splashScreenView.remove()
+            }
+        }
         createNotificationChannel()
         NotificationScheduler.scheduleNotifications(this, 288)
         // Inisialisasi ViewModel secara manual
@@ -107,6 +149,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Suggest Notif"

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Theme.SehatYou" parent="android:Theme.Material.Light.NoActionBar" >
+        <item name="android:windowBackground">@color/white</item>
+    </style>
 
-    <style name="Theme.SehatYou" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.SehatYou.Splash" parent="Theme.SehatYou">
+        <!-- Background warna Splash Screen -->
+        <item name="android:windowSplashScreenBackground">@color/white</item>
+
+        <!-- Ikon di tengah layar Splash -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/tranparant</item>
+
+        <!-- Warna latar belakang ikon (Opsional) -->
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/white</item>
+    </style>
 </resources>
