@@ -27,7 +27,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
-import com.example.sehatyou.RegisterPage
 import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouRoomModel
 import com.example.sehatyou.roomdb.OfflineSehatYouRepository
@@ -41,6 +40,7 @@ import java.time.format.DateTimeFormatter
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: SehatYouRoomModel
     var isanimation = false
+
     @SuppressLint("UnrememberedMutableInteractionSource")
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -81,6 +81,7 @@ class MainActivity : ComponentActivity() {
         }
         createNotificationChannel()
         NotificationScheduler.scheduleNotifications(this, 288)
+
         // Inisialisasi ViewModel secara manual
         val sehatYouRepository = OfflineSehatYouRepository(
             SehatYouDatabase.getDatabase(applicationContext).suggestDao(),
@@ -144,7 +145,16 @@ class MainActivity : ComponentActivity() {
                                 diary = diary
                             )
                         }
-                        composable("landing") {LandingPage(navController)}
+                        composable("landing") { LandingPage(navController) }
+
+                        // Menambahkan route untuk halaman syarat dan ketentuan
+                        composable("terms") {
+                            SyaratPage(navController) // Halaman Syarat
+                            navController.navigate("SyaratPage")
+                        }
+                        composable("terms_and_conditions") {
+                            KetentuanLayananPage(navController) // Halaman Ketentuan Layanan
+                        }
                     }
                 }
             }

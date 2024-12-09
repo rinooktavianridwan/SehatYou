@@ -1,4 +1,4 @@
-package com.example.sehatyou
+package com.example.sehatyou.view
 
 import android.content.Context
 import android.widget.Toast
@@ -41,8 +41,8 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(Color(0xFF3C1732), Color(0xFFE7DFDC)),
-                    startY = 0f,
+                    colors = listOf(Color(0xFF3C1732), Color(0xFFD5BBC5)),
+                    startY = 7f,
                     endY = Float.POSITIVE_INFINITY
                 )
             )
@@ -86,45 +86,68 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
             var rePassword by remember { mutableStateOf("") }
             var acceptTerms by remember { mutableStateOf(false) }
 
+            // Nama Lengkap
             TextField(
                 value = fullName,
                 onValueChange = { fullName = it },
                 label = { Text("Nama Lengkap") },
                 placeholder = { Text("nama lengkap") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth() // Membatasi lebar agar tidak terlalu besar
+                    .height(45.dp) // Menentukan tinggi kotak agar lebih besar dan nyaman
+                    .padding(vertical = 8.dp), // Padding vertikal untuk memberi jarak
+                shape = MaterialTheme.shapes.small, // Menambahkan rounded corners
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Email
             TextField(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Alamat Email") },
                 placeholder = { Text("alamat email") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                modifier = Modifier
+                    .fillMaxWidth() // Membatasi lebar agar tidak terlalu besar
+                    .height(45.dp) // Menentukan tinggi kotak agar lebih besar dan nyaman
+                    .padding(vertical = 8.dp), // Padding vertikal untuk memberi jarak
+                shape = MaterialTheme.shapes.small, // Menambahkan rounded corners
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Password
             TextField(
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Kata Sandi") },
                 placeholder = { Text("kata sandi") },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth() // Membatasi lebar agar tidak terlalu besar
+                    .height(45.dp) // Menentukan tinggi kotak agar lebih besar dan nyaman
+                    .padding(vertical = 8.dp), // Padding vertikal untuk memberi jarak
+                shape = MaterialTheme.shapes.small, // Menambahkan rounded corners
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Re-enter Password
             TextField(
                 value = rePassword,
                 onValueChange = { rePassword = it },
                 label = { Text("Ulangi Kata Sandi") },
                 placeholder = { Text("re-enter password") },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth() // Membatasi lebar agar tidak terlalu besar
+                    .height(45.dp) // Menentukan tinggi kotak agar lebih besar dan nyaman
+                    .padding(vertical = 8.dp), // Padding vertikal untuk memberi jarak
+                shape = MaterialTheme.shapes.small, // Menambahkan rounded corners
+                singleLine = true
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -162,10 +185,10 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     onCheckedChange = { acceptTerms = it },
                     colors = CheckboxDefaults.colors(checkmarkColor = Color(0xFF4D0051))
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = "Saya menyetujui ",
-                    color = Color.Gray
+                    color = Color.White
                 )
                 Text(
                     text = "syarat",
@@ -175,7 +198,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                 )
                 Text(
                     text = " dan ",
-                    color = Color.Gray
+                    color = Color.White
                 )
                 Text(
                     text = "ketentuan layanan.",
@@ -191,7 +214,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Sudah punya akun?", color = Color.Gray)
+                Text(text = "Sudah punya akun?", color = Color.White)
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "Masuk",
