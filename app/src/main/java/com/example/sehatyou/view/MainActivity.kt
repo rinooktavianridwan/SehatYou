@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
                             focusManager.clearFocus() // Hapus fokus saat klik di luar area input
                         }
                 ) {
-                    NavHost(navController = navController, startDestination = "home") {
+                    NavHost(navController = navController, startDestination = "landing") {
                         composable("home") { HomePage(navController, viewModel) }
                         composable("setting") { SettingsPage(navController) }
                         composable("profile") { ProfilePage(navController) }
@@ -144,6 +144,7 @@ class MainActivity : ComponentActivity() {
                                 diary = diary
                             )
                         }
+                        composable("landing") {LandingPage(navController)}
                     }
                 }
             }
