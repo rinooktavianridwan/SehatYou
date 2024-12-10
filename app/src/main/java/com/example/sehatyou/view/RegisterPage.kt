@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +35,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Composable
 fun RegisterPage(navController: NavController = rememberNavController()) {
     val context = LocalContext.current
+
+    var fullName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var rePassword by remember { mutableStateOf("") }
+    var acceptTerms by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -53,6 +60,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Judul
             Text(
                 text = "Daftar",
                 style = TextStyle(
@@ -79,78 +87,49 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            var fullName by remember { mutableStateOf("") }
-            var email by remember { mutableStateOf("") }
-            var password by remember { mutableStateOf("") }
-            var rePassword by remember { mutableStateOf("") }
-            var acceptTerms by remember { mutableStateOf(false) }
-
             // Nama Lengkap
-            TextField(
+            InputField(
                 value = fullName,
                 onValueChange = { fullName = it },
-                label = { Text("Nama Lengkap") },
-                placeholder = { Text("nama lengkap") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(45.dp)
-                    .padding(vertical = 8.dp),
-                shape = MaterialTheme.shapes.small,
-                singleLine = true
+                label = "Nama Lengkap",
+                placeholder = "nama lengkap"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Email
-            TextField(
+            InputField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Alamat Email") },
-                placeholder = { Text("alamat email") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(45.dp)
-                    .padding(vertical = 8.dp),
-                shape = MaterialTheme.shapes.small,
-                singleLine = true
+                label = "Alamat Email",
+                placeholder = "alamat email"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Password
-            TextField(
+            InputField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Kata Sandi") },
-                placeholder = { Text("kata sandi") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(45.dp)
-                    .padding(vertical = 8.dp),
-                shape = MaterialTheme.shapes.small,
-                singleLine = true
+                label = "Kata Sandi",
+                placeholder = "kata sandi",
+                isPassword = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Re-enter Password
-            TextField(
+            InputField(
                 value = rePassword,
                 onValueChange = { rePassword = it },
-                label = { Text("Ulangi Kata Sandi") },
-                placeholder = { Text("re-enter password") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(45.dp)
-                    .padding(vertical = 8.dp),
-                shape = MaterialTheme.shapes.small,
-                singleLine = true
+                label = "Ulangi Kata Sandi",
+                placeholder = "re-enter password",
+                isPassword = true
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Tombol Submit
             Button(
                 onClick = {
                     if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
@@ -174,6 +153,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Syarat dan Ketentuan
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
@@ -208,6 +188,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Teks Masuk
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
@@ -225,6 +206,28 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
     }
 }
 
+@Composable
+fun InputField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    isPassword: Boolean = false
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        placeholder = { Text(placeholder) },
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        singleLine = true,
+        shape = MaterialTheme.shapes.small
+    )
+}
+
 private fun registerUser(email: String, password: String, fullName: String, context: Context, navController: NavController) {
     val auth = FirebaseAuth.getInstance()
     auth.createUserWithEmailAndPassword(email, password)
@@ -240,7 +243,9 @@ private fun registerUser(email: String, password: String, fullName: String, cont
                     .set(userData)
                     .addOnSuccessListener {
                         Toast.makeText(context, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show()
-                        navController.navigate("login")
+                        navController.navigate("login") {
+                            popUpTo("register") { inclusive = true }
+                        }
                     }
                     .addOnFailureListener {
                         Toast.makeText(context, "Gagal menyimpan data", Toast.LENGTH_SHORT).show()

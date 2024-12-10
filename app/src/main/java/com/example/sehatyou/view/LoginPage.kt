@@ -2,6 +2,7 @@ package com.example.sehatyou.view
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -35,11 +36,21 @@ import com.google.firebase.auth.GoogleAuthProvider
 fun LoginPage(navController: NavController = rememberNavController()) {
     val context = LocalContext.current
     val activity = context as Activity
+    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    // Check if the user is already logged in
+    LaunchedEffect(Unit) {
+        if (auth.currentUser != null) {
+            Toast.makeText(context, "Selamat datang kembali!", Toast.LENGTH_SHORT).show()
+            navController.navigate("home") {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+    }
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
-    val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     // Google Sign-In Client
     val googleSignInClient: GoogleSignInClient = remember {
@@ -168,9 +179,13 @@ fun LoginPage(navController: NavController = rememberNavController()) {
                     auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                navController.navigate("home")
+                                Toast.makeText(context, "Login berhasil!", Toast.LENGTH_SHORT).show()
+                                navController.navigate("home") {
+                                    popUpTo("login") { inclusive = true }
+                                }
                             } else {
                                 errorMessage = "Login gagal: ${task.exception?.message}"
+                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                             }
                         }
                 }
