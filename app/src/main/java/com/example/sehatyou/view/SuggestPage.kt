@@ -214,7 +214,7 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                                     val newSuggestion = fetchSuggestion()
                                     viewModel.add(newSuggestion)
                                 } catch (e: Exception) {
-                                    Toast.makeText(context, "e", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                                 } finally {
                                     isLoading.value = false
                                 }
