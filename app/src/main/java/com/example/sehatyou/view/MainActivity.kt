@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         createNotificationChannel()
-        NotificationScheduler.scheduleNotifications(this, 288)
+        NotificationScheduler.scheduleNotifications(this, 3)
         // Inisialisasi ViewModel secara manual
         val sehatYouRepository = OfflineSehatYouRepository(
             SehatYouDatabase.getDatabase(applicationContext).suggestDao(),
