@@ -150,14 +150,6 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("landing") { LandingPage(navController) }
 
-                        // Menambahkan route untuk halaman syarat dan ketentuan
-                        composable("terms") {
-                            SyaratPage(navController) // Halaman Syarat
-                            navController.navigate("SyaratPage")
-                        }
-                        composable("terms_and_conditions") {
-                            KetentuanLayananPage(navController) // Halaman Ketentuan Layanan
-                        }
                     }
                 }
             }

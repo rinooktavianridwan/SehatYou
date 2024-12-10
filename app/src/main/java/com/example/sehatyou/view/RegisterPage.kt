@@ -192,7 +192,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "syarat",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { navController.navigate("SyaratPage") }
+                    modifier = Modifier.clickable { navController.navigate("terms") }
                 )
                 Text(
                     text = " dan ",
@@ -202,7 +202,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "ketentuan layanan.",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { navController.navigate("KetentuanLayananPage") }
+                    modifier = Modifier.clickable { navController.navigate("terms_and_conditions") }
                 )
             }
 
