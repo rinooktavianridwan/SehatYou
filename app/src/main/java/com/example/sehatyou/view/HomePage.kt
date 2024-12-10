@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,19 +45,15 @@ import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun HomePage(navController: NavController = rememberNavController(), viewModel: SehatYouRoomModel) {
-    val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
-    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a"))
-    val savedSuggestions by viewModel.getAllTasks.collectAsState(initial = emptyList())
-    val sortedSuggestions = savedSuggestions.sortedWith(
-        compareByDescending {
-            LocalDateTime.parse(
-                "${it.date} ${it.time}",
-                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm")
-            )
-        }
-    )
-    val latestSuggestion = sortedSuggestions.firstOrNull()
+fun HomePage(
+    navController: NavController = rememberNavController(),
+    viewModel: SehatYouRoomModel,
+    initialData: HealthData?
+) {
+
+    // Mutable state untuk data yang sedang ditampilkan
+    val displayedData = remember { mutableStateOf(initialData) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,6 +87,7 @@ fun HomePage(navController: NavController = rememberNavController(), viewModel: 
                 )
             }
         }
+
         Text(
             modifier = Modifier.padding(top = 64.dp),
             fontSize = 24.sp,
@@ -99,42 +98,48 @@ fun HomePage(navController: NavController = rememberNavController(), viewModel: 
             fontSize = 24.sp,
             text = "yang Lebih Baik"
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            ActivityCard(
-                title = "Tidur",
-                subtitle = "7j 8m",
-                icon = R.drawable.tidur,
-                backgroundColor = colorResource(id = R.color.bluedark) // Warna biru untuk Tidur
-            )
-            ActivityCard(
-                title = "Olahraga",
-                subtitle = "3j 12m",
-                icon = R.drawable.olahraga,
-                backgroundColor = Color.White
-            )
+
+        // Menampilkan data dari `displayedData`
+        displayedData.value?.let { data ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                ActivityCard(
+                    title = "Tidur",
+                    subtitle = "${data.jamTidur} jam",
+                    icon = R.drawable.tidur,
+                    backgroundColor = colorResource(id = R.color.bluedark)
+                )
+                ActivityCard(
+                    title = "Olahraga",
+                    subtitle = "${data.langkahKaki} langkah",
+                    icon = R.drawable.olahraga,
+                    backgroundColor = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                ActivityCard(
+                    title = "Detak Jantung",
+                    subtitle = "${data.detakJantung} bpm",
+                    icon = R.drawable.detakjantung,
+                    backgroundColor = Color.White
+                )
+                ActivityCard(
+                    title = "Kalori Terbakar",
+                    subtitle = "${data.kaloriTerbakar} kkal",
+                    icon = R.drawable.lari,
+                    backgroundColor = Color.White
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            ActivityCard(
-                title = "Detak Jantung",
-                subtitle = "89 bpm",
-                icon = R.drawable.detakjantung,
-                backgroundColor = Color.White
-            )
-            ActivityCard(
-                title = "Kalori Terbakar",
-                subtitle = "100 kkal",
-                icon = R.drawable.lari,
-                backgroundColor = Color.White
-            )
-        }
+
         Spacer(modifier = Modifier.height(40.dp))
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -149,8 +154,7 @@ fun HomePage(navController: NavController = rememberNavController(), viewModel: 
                     .padding(start = 64.dp, bottom = 24.dp, end = 40.dp)
                     .fillMaxWidth(),
             ) {
-                Column(
-                ) {
+                Column {
                     Text(
                         text = "Bagaimana Mood Anda Hari Ini?",
                         fontSize = 16.sp,
@@ -188,72 +192,6 @@ fun HomePage(navController: NavController = rememberNavController(), viewModel: 
                     }
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        color = colorResource(id = R.color.FFDEC5),
-                        shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp)
-                    )
-                    .padding(16.dp, 16.dp, 16.dp, 0.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp, 0.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Saran",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = colorResource(id = R.color.purple3C1732),
-                            modifier = Modifier
-                                .background(colorResource(id = R.color.F7B087), CircleShape)
-                                .padding(24.dp, 4.dp)
-                        )
-                        Text(
-                            modifier = Modifier.clickable(onClick = { navController.navigate("suggest") }),
-                            text = "Lihat Semua",
-                            color = colorResource(id = R.color.purple3C1732)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    if (latestSuggestion != null) {
-                        // Jika ada data, tampilkan SuggestionCard dengan data terbaru
-                        SuggestionCard(
-                            title = latestSuggestion.title,
-                            deskripsi = latestSuggestion.descripsion,
-                            tanggal = latestSuggestion.date,
-                            waktu = latestSuggestion.time,
-                            isStarred = latestSuggestion.favorite,
-                            onClick = { /* Navigasi atau aksi */ },
-                            onStarToggle = { /* Toggle favorite */ }
-                        )
-                    } else {
-                        // Jika null, tampilkan SuggestionCard default
-                        SuggestionCard(
-                            title = "Saran Belum Tersedia",
-                            deskripsi = "Tambahkan saran sendiri pada halaman Saran",
-                            tanggal = currentDate,
-                            waktu = currentTime,
-                            isStarred = false,
-                            onClick = { /* Navigasi atau aksi */ },
-                            onStarToggle = {}
-                        )
-                    }
-
-                }
-            }
         }
     }
 }
-
-

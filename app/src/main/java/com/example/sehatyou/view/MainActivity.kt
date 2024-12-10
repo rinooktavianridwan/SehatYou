@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
@@ -27,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
+import com.example.sehatyou.view.RegisterPage
 import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouRoomModel
 import com.example.sehatyou.roomdb.OfflineSehatYouRepository
@@ -36,13 +36,83 @@ import com.example.sehatyou.utils.NotificationScheduler
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import android.content.Context
+import com.opencsv.CSVReader
+import java.io.InputStreamReader
+
+// Data class untuk menampung data
+data class HealthData(
+    val detakJantung: Int,
+    val langkahKaki: Int,
+    val jamTidur: Double,
+    val kaloriTerbakar: Int
+)
+
+// Variabel global untuk menyimpan data yang dipilih
+var selectedRow: HealthData? = null
+
+// Fungsi untuk membaca CSV
+fun readCSV(context: Context): List<HealthData> {
+    val healthDataList = mutableListOf<HealthData>()
+    val inputStream = context.assets.open("dummy_health_data_200.csv")
+    val reader = CSVReader(InputStreamReader(inputStream))
+
+    // Skip header
+    val rows = reader.readAll()
+    for (i in 1 until rows.size) {
+        val row = rows[i]
+        healthDataList.add(
+            HealthData(
+                detakJantung = row[0].toInt(),
+                langkahKaki = row[1].toInt(),
+                jamTidur = row[2].toDouble(),
+                kaloriTerbakar = row[3].toInt()
+            )
+        )
+    }
+    reader.close()
+    return healthDataList
+}
+
+// Fungsi untuk memilih data secara acak di awal
+fun selectRandomRow(dataList: List<HealthData>) {
+    selectedRow = dataList.random()
+}
+
+// Fungsi untuk memperbarui data berdasarkan kondisi
+fun updateSelectedRow(dataList: List<HealthData>) {
+    selectedRow?.let { currentRow ->
+        // Filter data berdasarkan kondisi
+        val filteredData = dataList.filter { newRow ->
+            newRow.langkahKaki > currentRow.langkahKaki &&
+                    newRow.jamTidur > currentRow.jamTidur &&
+                    newRow.kaloriTerbakar > currentRow.kaloriTerbakar
+        }
+
+        // Jika ada data yang memenuhi, pilih salah satu secara acak
+        if (filteredData.isNotEmpty()) {
+            selectedRow = filteredData.random()
+        }
+        // Jika tidak ada data yang memenuhi, data lama tetap digunakan
+    } ?: run {
+        // Jika selectedRow null (belum diinisialisasi), pilih data acak
+        selectRandomRow(dataList)
+    }
+}
+
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: SehatYouRoomModel
     var isanimation = false
+    private lateinit var healthDataList: List<HealthData>
 
     @SuppressLint("UnrememberedMutableInteractionSource")
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        healthDataList = readCSV(applicationContext)
+        selectRandomRow(healthDataList)
+        val initialHealthData = selectedRow
+
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         splashScreen.setOnExitAnimationListener { splashScreenView ->
@@ -108,7 +178,7 @@ class MainActivity : ComponentActivity() {
                         }
                 ) {
                     NavHost(navController = navController, startDestination = "landing") {
-                        composable("home") { HomePage(navController, viewModel) }
+                        composable("home") { HomePage(navController, viewModel, initialHealthData) }
                         composable("setting") { SettingsPage(navController) }
                         composable("profile") { ProfilePage(navController) }
                         composable("personalize") { PersonalizePage(navController) }
