@@ -1,4 +1,4 @@
-package com.example.sehatyou
+package com.example.sehatyou.view
 
 import android.content.Context
 import android.widget.Toast
@@ -21,8 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,13 +36,19 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun RegisterPage(navController: NavController = rememberNavController()) {
     val context = LocalContext.current
 
+    var fullName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var rePassword by remember { mutableStateOf("") }
+    var acceptTerms by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(Color(0xFF3C1732), Color(0xFFE7DFDC)),
-                    startY = 0f,
+                    colors = listOf(Color(0xFF3C1732), Color(0xFFD5BBC5)),
+                    startY = 7f,
                     endY = Float.POSITIVE_INFINITY
                 )
             )
@@ -54,6 +60,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Judul
             Text(
                 text = "Daftar",
                 style = TextStyle(
@@ -80,58 +87,51 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            var fullName by remember { mutableStateOf("") }
-            var email by remember { mutableStateOf("") }
-            var password by remember { mutableStateOf("") }
-            var rePassword by remember { mutableStateOf("") }
-            var acceptTerms by remember { mutableStateOf(false) }
-
-            TextField(
+            // Nama Lengkap
+            InputField(
                 value = fullName,
                 onValueChange = { fullName = it },
-                label = { Text("Nama Lengkap") },
-                placeholder = { Text("nama lengkap") },
-                modifier = Modifier.fillMaxWidth()
+                label = "Nama Lengkap",
+                placeholder = "nama lengkap"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
+            // Email
+            InputField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Alamat Email") },
-                placeholder = { Text("alamat email") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                label = "Alamat Email",
+                placeholder = "alamat email"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
+            // Password
+            InputField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Kata Sandi") },
-                placeholder = { Text("kata sandi") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                label = "Kata Sandi",
+                placeholder = "kata sandi",
+                isPassword = true
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
+            // Re-enter Password
+            InputField(
                 value = rePassword,
                 onValueChange = { rePassword = it },
-                label = { Text("Ulangi Kata Sandi") },
-                placeholder = { Text("re-enter password") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                label = "Ulangi Kata Sandi",
+                placeholder = "re-enter password",
+                isPassword = true
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Tombol Submit
             Button(
                 onClick = {
-                    // Validasi jika email dan password valid dan jika password cocok
                     if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
                         Toast.makeText(context, "Harap lengkapi semua kolom", Toast.LENGTH_SHORT).show()
                     } else if (!acceptTerms) {
@@ -153,6 +153,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Syarat dan Ketentuan
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
@@ -162,36 +163,37 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     onCheckedChange = { acceptTerms = it },
                     colors = CheckboxDefaults.colors(checkmarkColor = Color(0xFF4D0051))
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = "Saya menyetujui ",
-                    color = Color.Gray
+                    color = Color.White
                 )
                 Text(
                     text = "syarat",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Tambahkan navigasi ke halaman syarat dan ketentuan */ }
+                    modifier = Modifier.clickable { navController.navigate("terms") }
                 )
                 Text(
                     text = " dan ",
-                    color = Color.Gray
+                    color = Color.White
                 )
                 Text(
                     text = "ketentuan layanan.",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Tambahkan navigasi ke halaman ketentuan layanan */ }
+                    modifier = Modifier.clickable { navController.navigate("terms_and_conditions") }
                 )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Teks Masuk
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Sudah punya akun?", color = Color.Gray)
+                Text(text = "Sudah punya akun?", color = Color.White)
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "Masuk",
@@ -204,12 +206,33 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
     }
 }
 
+@Composable
+fun InputField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    isPassword: Boolean = false
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        placeholder = { Text(placeholder) },
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        singleLine = true,
+        shape = MaterialTheme.shapes.small
+    )
+}
+
 private fun registerUser(email: String, password: String, fullName: String, context: Context, navController: NavController) {
     val auth = FirebaseAuth.getInstance()
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Pendaftaran berhasil
                 val user = auth.currentUser
                 val db = FirebaseFirestore.getInstance()
                 val userData = hashMapOf(
@@ -220,13 +243,14 @@ private fun registerUser(email: String, password: String, fullName: String, cont
                     .set(userData)
                     .addOnSuccessListener {
                         Toast.makeText(context, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show()
-                        navController.navigate("login") // Arahkan ke halaman login setelah berhasil
+                        navController.navigate("login") {
+                            popUpTo("register") { inclusive = true }
+                        }
                     }
                     .addOnFailureListener {
                         Toast.makeText(context, "Gagal menyimpan data", Toast.LENGTH_SHORT).show()
                     }
             } else {
-                // Pendaftaran gagal
                 Toast.makeText(context, "Pendaftaran gagal: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }

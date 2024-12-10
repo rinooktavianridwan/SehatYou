@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SehatYou</string>
+    <string name="default_web_client_id">350787736007-gegvene40j94gihg4vn7s56441vfldul.apps.googleusercontent.com</string>
+
 </resources>

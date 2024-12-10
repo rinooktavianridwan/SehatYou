@@ -27,7 +27,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
-import com.example.sehatyou.RegisterPage
 import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouRoomModel
 import com.example.sehatyou.roomdb.OfflineSehatYouRepository
@@ -41,6 +40,7 @@ import java.time.format.DateTimeFormatter
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: SehatYouRoomModel
     var isanimation = false
+
     @SuppressLint("UnrememberedMutableInteractionSource")
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -80,7 +80,8 @@ class MainActivity : ComponentActivity() {
             }
         }
         createNotificationChannel()
-        NotificationScheduler.scheduleNotifications(this, 3)
+        NotificationScheduler.scheduleNotifications(this, 288)
+
         // Inisialisasi ViewModel secara manual
         val sehatYouRepository = OfflineSehatYouRepository(
             SehatYouDatabase.getDatabase(applicationContext).suggestDao(),
@@ -116,13 +117,16 @@ class MainActivity : ComponentActivity() {
                         composable("login") { LoginPage(navController) }
                         composable("smartwatch") { SmartWatchPage(navController) }
                         composable("diary") { DiaryPage(navController, viewModel) }
+                        composable("terms") { SyaratPage(navController) }
+                        composable("terms_and_conditions") { KetentuanLayananPage(navController) }
+
                         composable("diary_input_edit") {
                             val diary = DiaryEntity(
                                 title = "",
                                 description = "",
                                 category = "Neutral",
                                 date = LocalDate.now()
-                                    .format(DateTimeFormatter.ofPattern("dd MMMM yyyy")),
+                                    .format(DateTimeFormatter.ofPattern("DD MM YYYY")),
                                 time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
                             )
                             InputEditDiaryPage(
@@ -144,7 +148,8 @@ class MainActivity : ComponentActivity() {
                                 diary = diary
                             )
                         }
-                        composable("landing") {LandingPage(navController)}
+                        composable("landing") { LandingPage(navController) }
+
                     }
                 }
             }
