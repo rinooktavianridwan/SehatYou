@@ -117,13 +117,16 @@ class MainActivity : ComponentActivity() {
                         composable("login") { LoginPage(navController) }
                         composable("smartwatch") { SmartWatchPage(navController) }
                         composable("diary") { DiaryPage(navController, viewModel) }
+                        composable("terms") { SyaratPage(navController) }
+                        composable("terms_and_conditions") { KetentuanLayananPage(navController) }
+
                         composable("diary_input_edit") {
                             val diary = DiaryEntity(
                                 title = "",
                                 description = "",
                                 category = "Neutral",
                                 date = LocalDate.now()
-                                    .format(DateTimeFormatter.ofPattern("dd MMMM yyyy")),
+                                    .format(DateTimeFormatter.ofPattern("DD MM YYYY")),
                                 time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
                             )
                             InputEditDiaryPage(

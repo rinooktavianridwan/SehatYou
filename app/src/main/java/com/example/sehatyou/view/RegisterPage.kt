@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -93,10 +92,10 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                 label = { Text("Nama Lengkap") },
                 placeholder = { Text("nama lengkap") },
                 modifier = Modifier
-                    .fillMaxWidth() // Membatasi lebar agar tidak terlalu besar
-                    .height(45.dp) // Menentukan tinggi kotak agar lebih besar dan nyaman
-                    .padding(vertical = 8.dp), // Padding vertikal untuk memberi jarak
-                shape = MaterialTheme.shapes.small, // Menambahkan rounded corners
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .padding(vertical = 8.dp),
+                shape = MaterialTheme.shapes.small,
                 singleLine = true
             )
 
@@ -109,10 +108,10 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                 label = { Text("Alamat Email") },
                 placeholder = { Text("alamat email") },
                 modifier = Modifier
-                    .fillMaxWidth() // Membatasi lebar agar tidak terlalu besar
-                    .height(45.dp) // Menentukan tinggi kotak agar lebih besar dan nyaman
-                    .padding(vertical = 8.dp), // Padding vertikal untuk memberi jarak
-                shape = MaterialTheme.shapes.small, // Menambahkan rounded corners
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .padding(vertical = 8.dp),
+                shape = MaterialTheme.shapes.small,
                 singleLine = true
             )
 
@@ -126,10 +125,10 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                 placeholder = { Text("kata sandi") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
-                    .fillMaxWidth() // Membatasi lebar agar tidak terlalu besar
-                    .height(45.dp) // Menentukan tinggi kotak agar lebih besar dan nyaman
-                    .padding(vertical = 8.dp), // Padding vertikal untuk memberi jarak
-                shape = MaterialTheme.shapes.small, // Menambahkan rounded corners
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .padding(vertical = 8.dp),
+                shape = MaterialTheme.shapes.small,
                 singleLine = true
             )
 
@@ -143,10 +142,10 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                 placeholder = { Text("re-enter password") },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
-                    .fillMaxWidth() // Membatasi lebar agar tidak terlalu besar
-                    .height(45.dp) // Menentukan tinggi kotak agar lebih besar dan nyaman
-                    .padding(vertical = 8.dp), // Padding vertikal untuk memberi jarak
-                shape = MaterialTheme.shapes.small, // Menambahkan rounded corners
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .padding(vertical = 8.dp),
+                shape = MaterialTheme.shapes.small,
                 singleLine = true
             )
 
@@ -154,7 +153,6 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
 
             Button(
                 onClick = {
-                    // Validasi jika email dan password valid dan jika password cocok
                     if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
                         Toast.makeText(context, "Harap lengkapi semua kolom", Toast.LENGTH_SHORT).show()
                     } else if (!acceptTerms) {
@@ -194,7 +192,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "syarat",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Tambahkan navigasi ke halaman syarat dan ketentuan */ }
+                    modifier = Modifier.clickable { navController.navigate("SyaratPage") }
                 )
                 Text(
                     text = " dan ",
@@ -204,7 +202,7 @@ fun RegisterPage(navController: NavController = rememberNavController()) {
                     text = "ketentuan layanan.",
                     color = Color(0xFF3C1732),
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Tambahkan navigasi ke halaman ketentuan layanan */ }
+                    modifier = Modifier.clickable { navController.navigate("KetentuanLayananPage") }
                 )
             }
 
@@ -232,7 +230,6 @@ private fun registerUser(email: String, password: String, fullName: String, cont
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Pendaftaran berhasil
                 val user = auth.currentUser
                 val db = FirebaseFirestore.getInstance()
                 val userData = hashMapOf(
@@ -243,13 +240,12 @@ private fun registerUser(email: String, password: String, fullName: String, cont
                     .set(userData)
                     .addOnSuccessListener {
                         Toast.makeText(context, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show()
-                        navController.navigate("login") // Arahkan ke halaman login setelah berhasil
+                        navController.navigate("login")
                     }
                     .addOnFailureListener {
                         Toast.makeText(context, "Gagal menyimpan data", Toast.LENGTH_SHORT).show()
                     }
             } else {
-                // Pendaftaran gagal
                 Toast.makeText(context, "Pendaftaran gagal: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }
