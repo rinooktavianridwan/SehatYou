@@ -166,7 +166,7 @@ fun SuggestionCard(
 fun ActivityCard(title: String, subtitle: String, icon: Int, backgroundColor: Color) {
     Card(
         modifier = Modifier
-            .size(160.dp, 80.dp)
+            .size(200.dp, 80.dp)
             .padding(8.dp)
             .shadow(
                 elevation = 8.dp,
@@ -185,7 +185,7 @@ fun ActivityCard(title: String, subtitle: String, icon: Int, backgroundColor: Co
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(modifier = Modifier.width(60.dp)) {
+            Column(modifier = Modifier.width(102.dp)) {
                 Text(
                     text = title,
                     fontSize = 14.sp,

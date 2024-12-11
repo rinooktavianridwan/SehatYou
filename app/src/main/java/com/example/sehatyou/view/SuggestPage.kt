@@ -1,6 +1,7 @@
 package com.example.sehatyou.view
 
 import android.widget.Toast
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -60,7 +61,6 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun SuggestPage(navController: NavController = rememberNavController(), viewModel: SehatYouRoomModel) {
     var tanggal = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
-    val isLoading = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     val isPopupVisible = remember { mutableStateOf(false) }
@@ -79,17 +79,9 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
     )
 
     val selectedSuggestion = remember { mutableStateOf<SuggestEntity?>(null) }
-
-    if (isLoading.value) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f)),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(color = Color.White)
-        }
-    }
+    val isLoadingItem = remember { mutableStateOf(false) }
+    val favoriteSuggestions = sortedSuggestions.filter { it.favorite }
+    val otherSuggestions = sortedSuggestions.filter { !it.favorite }
 
     Box(
         modifier = Modifier
@@ -186,8 +178,48 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxWidth()
+                            .animateContentSize()
                     ) {
-                        items(sortedSuggestions) { item ->
+                        items(favoriteSuggestions) { item ->
+                            SuggestionCard(
+                                title = item.title,
+                                deskripsi = item.descripsion,
+                                tanggal = item.date,
+                                waktu = item.time,
+                                onClick = {
+                                    selectedSuggestion.value = item
+                                    isPopupVisible.value = true
+                                },
+                                isStarred = item.favorite,
+                                onStarToggle = {
+                                    viewModel.update(item.copy(favorite = !item.favorite))
+                                }
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+
+                        // Menampilkan loading indicator (jika ada)
+                        if (isLoadingItem.value) {
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                        .background(
+                                            color = Color.LightGray.copy(alpha = 0.5f),
+                                            shape = RoundedCornerShape(8.dp)
+                                        )
+                                        .height(60.dp),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    CircularProgressIndicator(color = Color.Gray)
+                                }
+                            }
+                        }
+
+                        // Menampilkan saran lainnya
+                        items(otherSuggestions) { item ->
                             SuggestionCard(
                                 title = item.title,
                                 deskripsi = item.descripsion,
@@ -209,14 +241,14 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                     Button(
                         onClick = {
                             coroutineScope.launch {
-                                isLoading.value = true
+                                isLoadingItem.value = true
                                 try {
                                     val newSuggestion = fetchSuggestion()
                                     viewModel.add(newSuggestion)
                                 } catch (e: Exception) {
                                     Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                                 } finally {
-                                    isLoading.value = false
+                                    isLoadingItem.value = false
                                 }
                             }
                         },
