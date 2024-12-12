@@ -54,6 +54,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 import com.example.sehatyou.ui.theme.SehatYouTheme
 import com.example.sehatyou.utils.NotificationScheduler
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun SettingsPage(navController: NavController = rememberNavController()) {
@@ -160,9 +161,15 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                     SettingOption(
                         icon = painterResource(id = R.drawable.iconlogout),
                         label = "Log Out",
-                        onClick = { navController.navigate("login")}
-
+                        onClick = {
+                            val auth: FirebaseAuth = FirebaseAuth.getInstance()
+                            auth.signOut() // Logout dari Firebase
+                            navController.navigate("login") {
+                                popUpTo("home") { inclusive = true } // Membersihkan stack navigasi hingga ke halaman login
+                            }
+                        }
                     )
+
                 }
             }
         }
