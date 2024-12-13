@@ -86,7 +86,7 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.F5F5F5))
+            .background(colorResource(id = R.color.F5F5F5)).padding(top=32.dp)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -103,13 +103,13 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                 Spacer(modifier = Modifier.width(235.dp))
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("menu")},
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Icon(
                         Icons.Filled.Menu,
                         contentDescription = "menu",
-                        modifier = Modifier.size(55.dp)
+                        modifier = Modifier.size(40.dp)
                     )
 
                 }

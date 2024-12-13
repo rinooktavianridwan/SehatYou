@@ -75,7 +75,7 @@ fun HomePage(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.F5F5F5)),
+            .background(colorResource(id = R.color.F5F5F5)).padding(top=32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -107,12 +107,12 @@ fun HomePage(
         }
 
         Text(
-            modifier = Modifier.padding(top = 64.dp),
+            modifier = Modifier.padding(top = 48.dp),
             fontSize = 24.sp,
             text = "Jadi Orang"
         )
         Text(
-            modifier = Modifier.padding(bottom = 64.dp),
+            modifier = Modifier.padding(bottom = 40.dp),
             fontSize = 24.sp,
             text = "yang Lebih Baik"
         )
@@ -168,7 +168,7 @@ fun HomePage(
         ) {
             Box(
                 modifier = Modifier
-                    .padding(start = 64.dp, bottom = 24.dp, end = 40.dp)
+                    .padding(start = 48.dp, bottom = 24.dp, end = 40.dp)
                     .fillMaxWidth(),
             ) {
                 Column {
@@ -181,7 +181,7 @@ fun HomePage(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Beri tahu kami apa yang sedang terjadi",
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
                         color = Color.White.copy(alpha = 0.8f)
                     )
                 }

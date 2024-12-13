@@ -265,7 +265,7 @@ fun NotificationIntervalDialog(
 fun SettingOption(icon: Painter, label: String, onClick: (() -> Unit)? = null) {
     Column(
         modifier = Modifier
-            .size(120.dp)
+            .size(150.dp)
             .background(Color.White, shape = RoundedCornerShape(8.dp))
             .shadow(
                 elevation = 12.dp,

@@ -222,7 +222,9 @@ fun DiaryCard(
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF3C1732))
     ) {
-        Column(modifier = Modifier.padding(16.dp).height(160.dp)) {
+        Column(modifier = Modifier
+            .padding(16.dp)
+            .height(160.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,

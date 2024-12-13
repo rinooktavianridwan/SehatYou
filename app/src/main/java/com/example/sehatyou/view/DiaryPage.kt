@@ -64,7 +64,7 @@ fun DiaryPage(navController: NavController = rememberNavController(), viewModel:
         }
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().padding(top = 40.dp)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +88,7 @@ fun DiaryPage(navController: NavController = rememberNavController(), viewModel:
                     Image(
                         painter = painterResource(id = R.drawable.icon_back),
                         contentDescription = "Back",
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(80.dp)
                     )
                 }
             }

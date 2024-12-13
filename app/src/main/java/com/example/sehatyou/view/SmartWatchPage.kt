@@ -55,7 +55,8 @@ fun SmartWatchPage(navController: NavController = rememberNavController()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.F5F5F5)),
+            .background(colorResource(id = R.color.F5F5F5))
+            .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
@@ -87,6 +88,7 @@ fun SmartWatchPage(navController: NavController = rememberNavController()) {
                 )
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Konten
         Column(
@@ -96,7 +98,7 @@ fun SmartWatchPage(navController: NavController = rememberNavController()) {
                 .clip(shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                 .background(colorResource(id = R.color.FFDEC5))
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Daftar Smartwatch
             if (smartwatchList.isEmpty()) {
@@ -157,10 +159,16 @@ fun SmartWatchPage(navController: NavController = rememberNavController()) {
 
             // Menampilkan UI Permintaan Izin jika belum diberikan
             if (!permissionsGranted) {
-                RequestBluetoothPermissions {
-                    permissionsGranted = true
-                    // Setelah izin diberikan, baru panggil cek perangkat
-                    viewModel.checkForAlreadyConnectedDevices()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(), // Mengisi seluruh layar
+                    contentAlignment = Alignment.Center // Memusatkan konten
+                ) {
+                    RequestBluetoothPermissions {
+                        permissionsGranted = true
+                        // Setelah izin diberikan, baru panggil cek perangkat
+                        viewModel.checkForAlreadyConnectedDevices()
+                    }
                 }
             } else {
                 // Jika izin sudah diberikan sebelumnya
