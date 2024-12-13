@@ -1,5 +1,6 @@
 package com.example.sehatyou.view
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.sehatyou.HealthData
+import com.example.sehatyou.data.HealthData
 import com.example.sehatyou.R
 import com.example.sehatyou.model.SehatYouRoomModel
 import java.time.LocalDate
@@ -46,15 +48,17 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
+@SuppressLint("RememberReturnType")
 @Composable
 fun HomePage(
     navController: NavController = rememberNavController(),
     viewModel: SehatYouRoomModel,
-    initialData: HealthData?
 ) {
-
     // Mutable state untuk data yang sedang ditampilkan
-    val displayedData = remember { mutableStateOf(initialData) }
+    val context = LocalContext.current
+    remember { HealthData.initializeData(context) }
+    val displayedData = remember { mutableStateOf(HealthData.getSelectedRow()) }
+
     val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID")))
     val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a", Locale("id", "ID")))
     val savedSuggestions by viewModel.getAllTasks.collectAsState(initial = emptyList())
