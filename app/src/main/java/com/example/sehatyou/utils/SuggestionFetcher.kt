@@ -1,6 +1,8 @@
 package com.example.sehatyou.utils
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.example.sehatyou.GroqAI.ChatRequest
 import com.example.sehatyou.GroqAI.GroqApiClient
 import com.example.sehatyou.GroqAI.Message
@@ -12,6 +14,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import com.example.sehatyou.data.HealthData
 
 object SuggestionFetcher {
 
@@ -44,30 +47,47 @@ object SuggestionFetcher {
 
         return withContext(Dispatchers.IO) {
             try {
+                // Retrieve data
+                HealthData.updateSelectedRow()
+                val smartwatchData = HealthData.getSelectedRow()
+
                 // Retrieve the 7 newest diaries
                 val diaries = repository.getLatestDiaries(7)
-                val diaryText = diaries.joinToString("\n") { "${it.date}\n${it.description}" }
+                val diaryText = diaries.joinToString("\n") { "${it.category},${it.date}:${it.time}\n${it.description}" }
 
                 // Retrieve the 10 newest suggestions
                 val suggestions = repository.getLatestSuggestions(10)
-                val suggestionText = suggestions.joinToString("\n") { "${it.date}\n${it.descripsion}" }
+                val suggestionText = suggestions.joinToString("\n") { "${it.date}:${it.time}\n${it.descripsion}" }
 
                 val currentDateTime = LocalDateTime.now()
                 val formattedDate = currentDateTime.format(
                     DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID"))
                 )
                 val formattedTime = currentDateTime.format(DateTimeFormatter.ofPattern("HH:mm", Locale("id", "ID")))
+                var messageAI =
+                        "\"$systemAI\"\n" +
+                        "Ini adalah user dengan nama Vgte, dan ini adalah diary miliknya:\n" +
+                        "$diaryText\n" +
+                        "Berikut adalah 10 saran yang kamu berikan sebelumnya:\n" +
+                        "$suggestionText\n" +
+                        "Sekarang $formattedDate pukul $formattedTime, berikan saran yang relevan sekarang untuk user\n"
+
+                if (smartwatchData != null) {
+                    messageAI +=
+                        "Ini adalah data smartwatch dari user:\n" +
+                        "Detak jantung=${smartwatchData.detakJantung}\n" +
+                        "Langkah kaki=${smartwatchData.langkahKaki}\n" +
+                        "Jam tidur=${smartwatchData.jamTidur}\n" +
+                        "Kalori terbakar=${smartwatchData.kaloriTerbakar}\n"
+                } else {
+                    messageAI += "(data smartwatch kosong/tidak ada karena user tidak menyambungkan smartwatch)"
+                }
+
 
                 val descriptionMessages = listOf(
                     Message(
-                        "user",
-                        "\"$systemAI\"\n" +
-                                "Ini adalah user dengan nama Vgte, dan ini adalah diary miliknya:\n" +
-                                "\n$diaryText\n" +
-                                "\nBerikut adalah 10 saran yang kamu berikan sebelumnya:\n" +
-                                "\n$suggestionText\n" +
-                                "\nSekarang $formattedDate pukul $formattedTime, berikan saran yang relevan sekarang untuk user\n" +
-                                "\n(data smartwatch kosong/tidak ada karena user tidak menyambungkan smartwatch)"
+                        role = "user",
+                        content = messageAI
                     )
                 )
                 val descriptionRequest = ChatRequest("llama-3.1-70b-versatile", descriptionMessages)
