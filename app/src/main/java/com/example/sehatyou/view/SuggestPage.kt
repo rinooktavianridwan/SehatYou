@@ -58,6 +58,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import com.example.sehatyou.utils.getLocalDate
+import com.example.sehatyou.utils.getLocalTime
 
 @Composable
 fun SuggestPage(navController: NavController = rememberNavController(), viewModel: SehatYouRoomModel) {
@@ -72,10 +74,7 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
         compareByDescending<SuggestEntity> {
             it.favorite
         }.thenByDescending {
-            LocalDateTime.parse(
-                "${it.date} ${it.time}",
-                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm", Locale("id", "ID"))
-            )
+            LocalDateTime.of(it.getLocalDate(), it.getLocalTime())
         }
     )
 

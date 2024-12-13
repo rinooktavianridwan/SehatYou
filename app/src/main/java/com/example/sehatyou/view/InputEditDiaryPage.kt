@@ -55,7 +55,7 @@ fun InputEditDiaryPage(
     val moodCategories = listOf("Angry", "Sad", "Neutral", "Happy", "Excited")
 
     val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID")))
-    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a", Locale("id", "ID")))
+    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm", Locale("id", "ID")))
 
     val moodImages = listOf(
         R.drawable.icon_angry,
