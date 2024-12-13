@@ -43,6 +43,7 @@ import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouRoomModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun DiaryPage(navController: NavController = rememberNavController(), viewModel: SehatYouRoomModel) {
@@ -59,7 +60,7 @@ fun DiaryPage(navController: NavController = rememberNavController(), viewModel:
         }.thenByDescending {
             LocalDateTime.parse(
                 "${it.date} ${it.time}",
-                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm")
+                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm", Locale("id", "ID"))
             )
         }
     )
