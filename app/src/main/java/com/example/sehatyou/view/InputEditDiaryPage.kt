@@ -37,6 +37,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouRoomModel
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -51,6 +53,10 @@ fun InputEditDiaryPage(
     val description = remember { mutableStateOf(diary.description) }
     val selectedCategory = remember { mutableStateOf(diary.category) }
     val moodCategories = listOf("Angry", "Sad", "Neutral", "Happy", "Excited")
+
+    val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID")))
+    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a", Locale("id", "ID")))
+
     val moodImages = listOf(
         R.drawable.icon_angry,
         R.drawable.icon_sad,
@@ -175,8 +181,8 @@ fun InputEditDiaryPage(
                                     description = description.value,
                                     category = selectedCategory.value,
                                     favorite = false,
-                                    date = diary.date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID"))),
-                                    time = diary.time.format(DateTimeFormatter.ofPattern("HH:mm", Locale("id", "ID")))
+                                    date = currentDate,
+                                    time = currentTime
                                 )
                             )
                         } else {

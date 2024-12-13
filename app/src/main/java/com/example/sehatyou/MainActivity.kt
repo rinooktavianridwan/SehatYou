@@ -139,8 +139,8 @@ class MainActivity : ComponentActivity() {
                                 title = "",
                                 description = "",
                                 category = "Neutral",
-                                date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID"))),
-                                time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm", Locale("id", "ID")))
+                                date = "",
+                                time = ""
                             )
                             InputEditDiaryPage(
                                 navController = navController,
