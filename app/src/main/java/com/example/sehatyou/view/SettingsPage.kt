@@ -59,8 +59,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun SettingsPage(navController: NavController = rememberNavController()) {
-    var showDialogBahasa by remember { mutableStateOf(false) }
-    var selectedLanguage by remember { mutableStateOf("Bahasa Indonesia") }
     var showDialogNotifikasi by remember { mutableStateOf(false) }
     var notificationInterval by remember { mutableStateOf("") }
 
@@ -71,14 +69,14 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
             .padding(top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().padding(top= 8.dp)) {
             IconButton(
-                onClick = {navController.navigate("home")},
+                onClick = {navController.popBackStack()},
                 colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
                 modifier = Modifier
                     .size(60.dp, 60.dp)
                     .align(Alignment.TopEnd)
-                    .padding(start = 0.dp, top = 20.dp, end = 20.dp, bottom = 0.dp)
+                    .padding(start = 0.dp, top = 40.dp, end = 40.dp, bottom = 0.dp)
                     .shadow(
                         elevation = 8.dp,
                         shape = CircleShape,
@@ -97,7 +95,7 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .padding(top = 40.dp, bottom = 20.dp)
+                    .padding(top = 80.dp, bottom = 40.dp)
                     .align(Alignment.Center),
                 color = colorResource(id = R.color.F7B087)
             )
@@ -117,7 +115,7 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                 modifier = Modifier
                     .padding(40.dp, 80.dp)
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -134,22 +132,6 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                         onClick = { navController.navigate("smartwatch")}
                     )
                 }
-                Spacer(modifier = Modifier.height(24.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    SettingOption(
-                        icon = painterResource(id = R.drawable.iconlanguage),
-                        label = "Bahasa",
-                        onClick = { showDialogBahasa = true } // Menampilkan dialog saat diklik
-                    )
-                    SettingOption(
-                        icon = painterResource(id = R.drawable.iconcustomerservice),
-                        label = "Service"
-                    )
-                }
-                Spacer(modifier = Modifier.height(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -166,7 +148,7 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                             val auth: FirebaseAuth = FirebaseAuth.getInstance()
                             auth.signOut() // Logout dari Firebase
                             navController.navigate("login") {
-                                popUpTo("home") { inclusive = true } // Membersihkan stack navigasi hingga ke halaman login
+                                popUpTo("home") { inclusive = true }
                             }
                         }
                     )
@@ -174,21 +156,6 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                 }
             }
         }
-    }
-
-
-    // Dialog untuk memilih bahasa
-    if (showDialogBahasa) {
-        LanguageSelectionDialog(
-            currentLanguage = selectedLanguage,
-            onDismiss = { showDialogBahasa = false },
-            onSave = {
-                showDialogBahasa = false
-            },
-            onLanguageSelected = { language ->
-                selectedLanguage = language
-            }
-        )
     }
     // Dialog untuk memilih interval notifikasi
     if (showDialogNotifikasi) {
@@ -294,100 +261,11 @@ fun NotificationIntervalDialog(
     )
 }
 
-
-@Composable
-fun LanguageSelectionDialog(
-    currentLanguage: String,
-    onDismiss: () -> Unit,
-    onSave: () -> Unit,
-    onLanguageSelected: (String) -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = "Pilih Bahasa",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        colorResource(id = R.color.FFDEC5),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .padding(8.dp),
-                textAlign = TextAlign.Center
-            )
-        },
-        text = {
-            Column {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            colorResource(id = R.color.FFDEC5),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable { onLanguageSelected("Bahasa Indonesia") }
-                        .padding(16.dp, 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(text = "Bahasa Indonesia")
-                    Checkbox(
-                        checked = currentLanguage == "Bahasa Indonesia",
-                        onCheckedChange = { if (it) onLanguageSelected("Bahasa Indonesia") }
-                    )
-
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            colorResource(id = R.color.FFDEC5),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .clickable { onLanguageSelected("Bahasa Inggris") }
-                        .padding(16.dp, 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(text = "Bahasa Inggris")
-                    Checkbox(
-                        checked = currentLanguage == "Bahasa Inggris",
-                        onCheckedChange = { if (it) onLanguageSelected("Bahasa Inggris") }
-                    )
-                }
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = onSave,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(R.color.F7B087), // Change background color
-                    contentColor = Color.White // Change text/icon color
-                ),
-            ) {
-                Text("Simpan")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Batal")
-            }
-        }
-    )
-}
-
-
 @Composable
 fun SettingOption(icon: Painter, label: String, onClick: (() -> Unit)? = null) {
     Column(
         modifier = Modifier
-            .size(140.dp)
+            .size(120.dp)
             .background(Color.White, shape = RoundedCornerShape(8.dp))
             .shadow(
                 elevation = 12.dp,
