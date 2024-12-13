@@ -37,6 +37,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
 import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouRoomModel
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @Composable
@@ -173,8 +175,8 @@ fun InputEditDiaryPage(
                                     description = description.value,
                                     category = selectedCategory.value,
                                     favorite = false,
-                                    date = diary.date,
-                                    time = diary.time
+                                    date = diary.date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID"))),
+                                    time = diary.time.format(DateTimeFormatter.ofPattern("HH:mm", Locale("id", "ID")))
                                 )
                             )
                         } else {

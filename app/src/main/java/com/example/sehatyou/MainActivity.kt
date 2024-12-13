@@ -47,6 +47,7 @@ import com.example.sehatyou.view.SettingsPage
 import com.example.sehatyou.view.SmartWatchPage
 import com.example.sehatyou.view.SuggestPage
 import com.example.sehatyou.view.SyaratPage
+import java.util.Locale
 
 
 class MainActivity : ComponentActivity() {
@@ -138,9 +139,8 @@ class MainActivity : ComponentActivity() {
                                 title = "",
                                 description = "",
                                 category = "Neutral",
-                                date = LocalDate.now()
-                                    .format(DateTimeFormatter.ofPattern("DD MM YYYY")),
-                                time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+                                date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID"))),
+                                time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm", Locale("id", "ID")))
                             )
                             InputEditDiaryPage(
                                 navController = navController,
