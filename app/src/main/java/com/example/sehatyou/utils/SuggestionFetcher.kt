@@ -30,12 +30,14 @@ object SuggestionFetcher {
             Berikut adalah aturan yang harus kamu ikuti:
             1. Kamu akan diberikan informasi berupa diary user dan data smartwatch user (jika tersedia).
             2. Jika data smartwatch tidak tersedia, kamu tetap harus memberikan saran yang relevan berdasarkan diary saja.
-            3. Output harus berupa saran kegiatan singkat dalam bahasa Indonesia, dengan panjang maksimal 25 kata.
+            3. Output harus berupa saran kegiatan singkat dalam bahasa Indonesia, dengan panjang maksimal 20 kata.
             4. Output harus berupa kalimat langsung yang praktis dan actionable (dapat langsung dilakukan oleh user).
-            5. Jika ini bukan permintaan pertama, sistem akan menyertakan saran sebelumnya agar kamu dapat memberikan saran baru yang melengkapi saran sebelumnya tanpa mengulanginya.
-            6. Pertimbangkan konteks waktu (pagi, siang, malam) dan mood user yang tergambar dalam diary untuk membuat saran lebih personal.
-            7. Jika diary menunjukkan suasana hati negatif (stres, sedih), utamakan saran untuk manajemen stres atau aktivitas relaksasi.
-            8. Jika diary menunjukkan suasana hati positif (bahagia, produktif), berikan saran untuk mempertahankan atau meningkatkan suasana tersebut.
+            5. Tidak perlu tambahkan kata-kata lain selain kegiatan yang relevan. Contoh output yang valid: "Luangkan waktu untuk membaca buku favorit sebelum tidur." 
+            6. Jadi tidak perlu menambahkan kalimat seperti "berdasarkan diary user" atau "berdasarkan data smartwatch user" atau "Berikut saran kegiatan yang relevan untuk user""
+            7. Jika ini bukan permintaan pertama, sistem akan menyertakan saran sebelumnya agar kamu dapat memberikan saran baru yang melengkapi saran sebelumnya tanpa mengulanginya.
+            8. Pertimbangkan konteks waktu (pagi, siang, malam) dan mood user yang tergambar dalam diary untuk membuat saran lebih personal.
+            9. Jika diary menunjukkan suasana hati negatif (stres, sedih), utamakan saran untuk manajemen stres atau aktivitas relaksasi.
+            10. Jika diary menunjukkan suasana hati positif (bahagia, produktif), berikan saran untuk mempertahankan atau meningkatkan suasana tersebut.
             
             Tugasmu adalah memberikan saran kegiatan yang relevan dan terarah untuk user.
         """.trimIndent()
@@ -62,7 +64,7 @@ object SuggestionFetcher {
                         "\"$systemAI\"\n" +
                                 "Ini adalah user dengan nama Vgte, dan ini adalah diary miliknya:\n" +
                                 "\n$diaryText\n" +
-                                "\nBerikut adalah 10 saran sebelumnya:\n" +
+                                "\nBerikut adalah 10 saran yang kamu berikan sebelumnya:\n" +
                                 "\n$suggestionText\n" +
                                 "\nSekarang $formattedDate pukul $formattedTime, berikan saran yang relevan sekarang untuk user\n" +
                                 "\n(data smartwatch kosong/tidak ada karena user tidak menyambungkan smartwatch)"
