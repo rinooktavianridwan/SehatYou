@@ -22,4 +22,7 @@ interface SuggestDao {
 
     @Query("SELECT * FROM suggest_table")
     fun getAll(): Flow<List<SuggestEntity>>
+
+    @Query("SELECT * FROM suggest_table ORDER BY date DESC, time DESC LIMIT :limit")
+    suspend fun getLatestSuggestions(limit: Int): List<SuggestEntity>
 }

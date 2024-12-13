@@ -50,13 +50,14 @@ import com.example.sehatyou.GroqAI.Message
 import com.example.sehatyou.R
 import com.example.sehatyou.model.SehatYouRoomModel
 import com.example.sehatyou.model.SuggestEntity
-import com.example.sehatyou.utils.fetchSuggestion
+import com.example.sehatyou.utils.SuggestionFetcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun SuggestPage(navController: NavController = rememberNavController(), viewModel: SehatYouRoomModel) {
@@ -73,7 +74,7 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
         }.thenByDescending {
             LocalDateTime.parse(
                 "${it.date} ${it.time}",
-                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm")
+                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm", Locale("id", "ID"))
             )
         }
     )
@@ -243,7 +244,7 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                             coroutineScope.launch {
                                 isLoadingItem.value = true
                                 try {
-                                    val newSuggestion = fetchSuggestion()
+                                    val newSuggestion = SuggestionFetcher.fetchSuggestion()
                                     viewModel.add(newSuggestion)
                                 } catch (e: Exception) {
                                     Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()

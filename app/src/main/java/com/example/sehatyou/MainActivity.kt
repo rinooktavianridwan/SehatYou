@@ -1,4 +1,4 @@
-package com.example.sehatyou.view
+package com.example.sehatyou
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -25,18 +24,29 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sehatyou.R
 import com.example.sehatyou.view.RegisterPage
 import com.example.sehatyou.model.DiaryEntity
 import com.example.sehatyou.model.SehatYouRoomModel
 import com.example.sehatyou.roomdb.OfflineSehatYouRepository
 import com.example.sehatyou.roomdb.SehatYouDatabase
 import com.example.sehatyou.ui.theme.SehatYouTheme
-import com.example.sehatyou.utils.NotificationScheduler
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import android.content.Context
+import com.example.sehatyou.view.DiaryPage
+import com.example.sehatyou.view.HomePage
+import com.example.sehatyou.view.InputEditDiaryPage
+import com.example.sehatyou.view.KetentuanLayananPage
+import com.example.sehatyou.view.LandingPage
+import com.example.sehatyou.view.LoginPage
+import com.example.sehatyou.view.PersonalizePage
+import com.example.sehatyou.view.ProfilePage
+import com.example.sehatyou.view.SehatYouViewModelFactory
+import com.example.sehatyou.view.SettingsPage
+import com.example.sehatyou.view.SmartWatchPage
+import com.example.sehatyou.view.SuggestPage
+import com.example.sehatyou.view.SyaratPage
 import com.opencsv.CSVReader
 import java.io.InputStreamReader
 

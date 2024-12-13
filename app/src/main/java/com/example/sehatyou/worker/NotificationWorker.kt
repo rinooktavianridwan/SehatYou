@@ -12,7 +12,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.sehatyou.R
 import com.example.sehatyou.roomdb.SehatYouDatabase
-import com.example.sehatyou.utils.fetchSuggestion
+import com.example.sehatyou.utils.SuggestionFetcher
 
 class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
@@ -20,7 +20,7 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
     override suspend fun doWork(): Result {
         return try {
             // Fetch the suggestion
-            val suggestion = fetchSuggestion()
+            val suggestion = SuggestionFetcher.fetchSuggestion()
 
             // Save to Room database
             val db = SehatYouDatabase.getDatabase(applicationContext)

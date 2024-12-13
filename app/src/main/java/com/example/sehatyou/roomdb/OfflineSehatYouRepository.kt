@@ -21,5 +21,11 @@ class OfflineSehatYouRepository(
     override suspend fun getDiaryById(id: Int): DiaryEntity? = diaryDao.getDiaryById(id)
     override fun searchDiaries(searchText: String): Flow<List<DiaryEntity>> =
         diaryDao.searchDiaries(searchText)
-
+    
+    override suspend fun getLatestDiaries(limit: Int): List<DiaryEntity> {
+        return diaryDao.getLatestDiaries(limit)
+    }
+    override suspend fun getLatestSuggestions(limit: Int): List<SuggestEntity> {
+        return suggestDao.getLatestSuggestions(limit)
+    }
 }

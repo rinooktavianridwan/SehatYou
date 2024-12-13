@@ -36,12 +36,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.sehatyou.HealthData
 import com.example.sehatyou.R
 import com.example.sehatyou.model.SehatYouRoomModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @Composable
@@ -53,14 +55,14 @@ fun HomePage(
 
     // Mutable state untuk data yang sedang ditampilkan
     val displayedData = remember { mutableStateOf(initialData) }
-    val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
-    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a"))
+    val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID")))
+    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a", Locale("id", "ID")))
     val savedSuggestions by viewModel.getAllTasks.collectAsState(initial = emptyList())
     val sortedSuggestions = savedSuggestions.sortedWith(
         compareByDescending {
             LocalDateTime.parse(
                 "${it.date} ${it.time}",
-                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm")
+                DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm", Locale("id", "ID"))
             )
         }
     )

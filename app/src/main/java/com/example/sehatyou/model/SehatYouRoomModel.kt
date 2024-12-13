@@ -81,4 +81,12 @@ class SehatYouRoomModel(private val sehatYouRepository: SehatYouRepository) : Vi
             else sehatYouRepository.searchDiaries(query)
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    suspend fun getLatestDiaries(limit: Int): List<DiaryEntity> {
+        return sehatYouRepository.getLatestDiaries(limit)
+    }
+    
+    suspend fun getLatestSuggestions(limit: Int): List<SuggestEntity> {
+        return sehatYouRepository.getLatestSuggestions(limit)
+    }
 }

@@ -22,4 +22,7 @@ interface SehatYouRepository {
     suspend fun getDiaryById(id: Int): DiaryEntity?
     fun searchDiaries(searchText: String): Flow<List<DiaryEntity>>
 
+    suspend fun getLatestDiaries(limit: Int): List<DiaryEntity>
+    suspend fun getLatestSuggestions(limit: Int): List<SuggestEntity>
+
 }

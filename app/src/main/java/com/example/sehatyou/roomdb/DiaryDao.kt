@@ -29,5 +29,6 @@ interface DiaryDao {
     @Query("SELECT * FROM diary_table WHERE title LIKE '%' || :searchText || '%' OR description LIKE '%' || :searchText || '%'")
     fun searchDiaries(searchText: String): Flow<List<DiaryEntity>>
 
-
+    @Query("SELECT * FROM diary_table ORDER BY date DESC, time DESC LIMIT :limit")
+    suspend fun getLatestDiaries(limit: Int): List<DiaryEntity>
 }
