@@ -1,133 +1,71 @@
 package com.example.sehatyou.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
+import com.example.sehatyou.model.UserEntity
+import com.example.sehatyou.utils.getUserDataFromFirebase
+import com.example.sehatyou.utils.saveUserDataToFirebase
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonalizePage(navController: NavController = rememberNavController()) {
-    var beratBadan = remember { mutableStateOf("55 kg") }
-    var tinggiBadan = remember { mutableStateOf("174 cm") }
-    var dateState = rememberDatePickerState()
-    var openDialog = remember { mutableStateOf(false) }
-    var tglLahir = remember { mutableStateOf("11/22/2024") }
-    var jamKerjaStart = remember { mutableStateOf("") }
-    var jamKerjaEnd = remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-    if (openDialog.value) {
-        DatePickerDialog(
-            onDismissRequest = {
-                openDialog.value = false
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        openDialog.value = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        openDialog.value = false
-                    }
-                ) {
-                    Text("CANCEL")
-                }
-            }
-        ) {
-            DatePicker(
-                state = dateState
-            )
+    // State untuk menampung data input pengguna
+    var beratBadan by remember { mutableStateOf("55 kg") }
+    var tinggiBadan by remember { mutableStateOf("174 cm") }
+    var tglLahir by remember { mutableStateOf("11/22/2024") }
+    var jamKerjaStart by remember { mutableStateOf("09:00") }
+    var jamKerjaEnd by remember { mutableStateOf("17:00") }
+
+    // Load existing user data
+    LaunchedEffect(Unit) {
+        getUserDataFromFirebase(userId, context) { userEntity ->
+            beratBadan = userEntity.beratBadan
+            tinggiBadan = userEntity.tinggiBadan
+            tglLahir = userEntity.tglLahir
+            jamKerjaStart = userEntity.jamKerjaStart
+            jamKerjaEnd = userEntity.jamKerjaEnd
         }
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.F5F5F5)),
+            .background(colorResource(id = R.color.F5F5F5))
     ) {
-
-        Column (
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Tombol kembali
             IconButton(
-                onClick = {
-                    navController.navigate("setting")
-                },
-                colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
+                onClick = { navController.navigate("setting") },
                 modifier = Modifier
-                    .size(60.dp, 60.dp)
+                    .size(60.dp)
                     .align(Alignment.End)
-                    .padding(start = 0.dp, top = 15.dp, end = 20.dp, bottom = 0.dp)
-                    .shadow(4.dp, CircleShape, ambientColor = Color.Black, spotColor = Color.Black),
-            )
-            {
-                Icon(imageVector  = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back")
+                    .padding(16.dp)
+            ) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back")
             }
 
-            Image (
-                painterResource(id = R.drawable.icon__profile_circle_),
-                "profile",
-                modifier = Modifier
-                    .size(150.dp, 150.dp)
-                    .padding(0.dp, 0.dp, 0.dp, 5.dp)
-                    .align(Alignment.CenterHorizontally),
-
-                )
-
-            Text(
-                text = "Ganti Gambar",
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                color = colorResource(id = R.color.purple423892)
-            )
-
-            Box (
+            // Box untuk form input
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 10.dp)
@@ -136,141 +74,89 @@ fun PersonalizePage(navController: NavController = rememberNavController()) {
                         RoundedCornerShape(25.dp, 25.dp, 0.dp, 0.dp)
                     )
             ) {
-                Column (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 40.dp, start = 25.dp, end = 25.dp, bottom = 0.dp)
-                ){
+                Column(modifier = Modifier.padding(25.dp)) {
                     Text(text = "Berat Badan")
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
                     OutlinedTextField(
-                        value = beratBadan.value,
-                        onValueChange = {beratBadan.value = it},
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = colorResource(id = R.color.FFDEC5),
-                            unfocusedContainerColor = colorResource(id = R.color.FFDEC5),
-                        ),
+                        value = beratBadan,
+                        onValueChange = { beratBadan = it },
+                        modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        singleLine = true,
-                        placeholder = {Text(beratBadan.value)}
+                        singleLine = true
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Text(text = "Tinggi Badan")
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
                     OutlinedTextField(
-                        value = tinggiBadan.value,
-                        onValueChange = {tinggiBadan.value = it},
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = colorResource(id = R.color.FFDEC5),
-                            unfocusedContainerColor = colorResource(id = R.color.FFDEC5),
-                        ),
+                        value = tinggiBadan,
+                        onValueChange = { tinggiBadan = it },
+                        modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        singleLine = true,
-                        placeholder = {tinggiBadan.value}
+                        singleLine = true
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Text(text = "Tanggal Lahir")
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
                     OutlinedTextField(
-                        value = dateState.selectedDateMillis.toString(),
-                        onValueChange = {},
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = colorResource(id = R.color.FFDEC5),
-                            unfocusedContainerColor = colorResource(id = R.color.FFDEC5),
-                        ),
+                        value = tglLahir,
+                        onValueChange = { tglLahir = it },
+                        modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        singleLine = true,
-                        placeholder = {dateState.selectedDateMillis}
+                        singleLine = true
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Text(text = "Jam Kerja")
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
                     Row {
                         OutlinedTextField(
-                            value = jamKerjaStart.value,
-                            onValueChange = {jamKerjaStart.value = it},
-                            modifier = Modifier
-                                .width(120.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = colorResource(id = R.color.FFDEC5),
-                                unfocusedContainerColor = colorResource(id = R.color.FFDEC5),
-                            ),
+                            value = jamKerjaStart,
+                            onValueChange = { jamKerjaStart = it },
+                            modifier = Modifier.width(120.dp),
                             shape = RoundedCornerShape(12.dp),
-                            singleLine = true,
-                            placeholder = {Text(jamKerjaStart.value)},
+                            singleLine = true
                         )
 
-                        Spacer(modifier = Modifier.width(100.dp))
+                        Spacer(modifier = Modifier.width(20.dp))
 
                         OutlinedTextField(
-                            value = jamKerjaEnd.value,
-                            onValueChange = {jamKerjaEnd.value = it},
-                            modifier = Modifier
-                                .width(120.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = colorResource(id = R.color.FFDEC5),
-                                unfocusedContainerColor = colorResource(id = R.color.FFDEC5),
-                            ),
+                            value = jamKerjaEnd,
+                            onValueChange = { jamKerjaEnd = it },
+                            modifier = Modifier.width(120.dp),
                             shape = RoundedCornerShape(12.dp),
-                            singleLine = true,
-                            placeholder = {Text(jamKerjaEnd.value)},
+                            singleLine = true
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(80.dp))
+                    Spacer(modifier = Modifier.height(50.dp))
 
-                    Button (
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(45.dp)
-                            .padding(start = 45.dp, top = 0.dp, end = 45.dp, bottom = 0.dp),
+                    // Tombol Perbarui
+                    Button(
                         onClick = {
-                            navController.navigate("personalize")
+                            val userEntity = UserEntity(
+                                beratBadan = beratBadan,
+                                tinggiBadan = tinggiBadan,
+                                tglLahir = tglLahir,
+                                jamKerjaStart = jamKerjaStart,
+                                jamKerjaEnd = jamKerjaEnd
+                            )
+                            saveUserDataToFirebase(userId, userEntity, context)
                         },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.purple3C1732),
-                            contentColor = colorResource(id = R.color.white)
-                        ),
+                        modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        contentPadding = PaddingValues(0.dp)
+                        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple3C1732))
                     ) {
-                        Text(
-                            text = "Perbarui",
-                            fontSize = 18.sp,
-                        )
+                        Text(text = "Perbarui", fontSize = 18.sp, color = Color.White)
                     }
-
-
-
                 }
             }
         }
     }
 }
 
-
 @Preview
 @Composable
-fun PreviewPersonalizeBox() {
+fun PreviewPersonalizePage() {
     PersonalizePage()
 }
