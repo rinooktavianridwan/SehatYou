@@ -54,7 +54,7 @@ fun LandingPage(navController: NavController = rememberNavController()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White).padding(top=64.dp)
     ) {
         // Background with gradient and image
         Image(
@@ -107,7 +107,7 @@ fun LandingPage(navController: NavController = rememberNavController()) {
                 textAlign = TextAlign.Start
             )
 
-            Spacer(modifier = Modifier.weight(0.4f))
+            Spacer(modifier = Modifier.weight(1f))
 
             // Buttons
             Column(
