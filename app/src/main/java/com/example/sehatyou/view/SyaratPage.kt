@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun SyaratPage(navController: NavController) {
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier.padding(16.dp, 56.dp, 16.dp, 16.dp)) {
         // Title
         Text(
             text = "Syarat Penggunaan Layanan",

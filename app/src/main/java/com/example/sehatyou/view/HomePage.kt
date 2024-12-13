@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -29,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -46,6 +49,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.math.round
 
 
 @SuppressLint("RememberReturnType")
@@ -55,12 +59,12 @@ fun HomePage(
     viewModel: SehatYouRoomModel,
 ) {
     // Mutable state untuk data yang sedang ditampilkan
-    val context = LocalContext.current
-    remember { HealthData.initializeData(context) }
     val displayedData = remember { mutableStateOf(HealthData.getSelectedRow()) }
 
-    val currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID")))
-    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a", Locale("id", "ID")))
+    val currentDate =
+        LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID")))
+    val currentTime =
+        LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a", Locale("id", "ID")))
     val savedSuggestions by viewModel.getAllTasks.collectAsState(initial = emptyList())
     val sortedSuggestions = savedSuggestions.sortedWith(
         compareByDescending {
@@ -75,7 +79,8 @@ fun HomePage(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.F5F5F5)).padding(top=32.dp),
+            .background(colorResource(id = R.color.F5F5F5))
+            .padding(top = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -120,7 +125,9 @@ fun HomePage(
         // Menampilkan data dari `displayedData`
         displayedData.value?.let { data ->
             Row(
-                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 ActivityCard(
@@ -137,7 +144,9 @@ fun HomePage(
                 )
             }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 ActivityCard(
@@ -151,6 +160,27 @@ fun HomePage(
                     subtitle = "${data.kaloriTerbakar} kkal",
                     icon = R.drawable.lari,
                     backgroundColor = Color.White
+                )
+            }
+        }
+        if (displayedData.value == null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 60.dp)
+                    .height(80.dp)
+                    .clickable { navController.navigate("smartwatch") }
+                    .background(
+                        colorResource(id = R.color.purple3C1732),
+                        RoundedCornerShape(16.dp)
+                    ),
+                contentAlignment = Alignment.Center,
+
+                ) {
+                Text(
+                    text = "Sinkronasi Dengan Smartwatch",
+                    fontSize = 18.sp,
+                    color = Color.White,
                 )
             }
         }

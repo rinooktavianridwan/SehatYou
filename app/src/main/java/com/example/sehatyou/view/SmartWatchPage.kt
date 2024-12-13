@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.sehatyou.R
+import com.example.sehatyou.data.HealthData
 import com.example.sehatyou.model.Smartwatch
 import com.example.sehatyou.viewmodel.SmartwatchViewModel
 
@@ -147,6 +148,7 @@ fun SmartWatchPage(navController: NavController = rememberNavController()) {
                                 viewModel.startBleScan()
                             }
                         }
+                        HealthData.initializeData(context)
                     },
                     modifier = Modifier
                         .fillMaxWidth()

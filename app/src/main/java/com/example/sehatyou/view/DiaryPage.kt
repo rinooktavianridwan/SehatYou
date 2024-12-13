@@ -64,7 +64,7 @@ fun DiaryPage(navController: NavController = rememberNavController(), viewModel:
         }
     )
 
-    Box(modifier = Modifier.fillMaxSize().padding(top = 40.dp)) {
+    Box(modifier = Modifier.fillMaxSize().padding(top = 56.dp)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
