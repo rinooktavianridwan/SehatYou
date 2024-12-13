@@ -23,11 +23,12 @@ data class HealthData(
 
         fun getSelectedRow(): HealthData? {
             if (selectedRow == null) {
-                selectedRow = healthDataList.randomOrNull()
+                val filteredList = healthDataList.filter { it.langkahKaki < 2000 }
+                selectedRow = filteredList.randomOrNull()
             }
             return selectedRow
         }
-
+        
         fun updateSelectedRow() {
             selectedRow?.let { currentRow ->
                 // Filter data berdasarkan kondisi
