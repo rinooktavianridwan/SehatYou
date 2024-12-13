@@ -44,15 +44,14 @@ object NotificationScheduler {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            alarmManager.setExactAndAllowWhileIdle(
+            alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 triggerTime,
+                AlarmManager.INTERVAL_DAY,
                 pendingIntent
             )
             Log.d(TAG, "Scheduling notification $i at ${Date(triggerTime)}")
         }
-
-        Toast.makeText(context,"Success schedule notifications", Toast.LENGTH_SHORT).show()
     }
 
     fun cancelScheduledNotifications(context: Context, numNotifications: Int) {

@@ -1,5 +1,6 @@
 package com.example.sehatyou.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -203,6 +204,7 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                 showDialogNotifikasi = false
                 val numNotifications = notificationInterval.toIntOrNull() ?: 1
                 NotificationScheduler.scheduleNotifications(context, numNotifications) // Menjadwalkan ulang dengan nilai baru
+                Toast.makeText(context,"Success schedule notifications", Toast.LENGTH_SHORT).show()
             }
         )
     }
