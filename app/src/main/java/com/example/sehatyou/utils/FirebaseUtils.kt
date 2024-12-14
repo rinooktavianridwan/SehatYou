@@ -37,7 +37,8 @@ fun getUserDataFromFirebase(
     onDataRetrieved: (UserEntity) -> Unit
 ) {
     if (userId != null) {
-        val database = FirebaseDatabase.getInstance().getReference("users").child(userId)
+        val databaseUrl = "https://sehatyou-88c86-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        val database = FirebaseDatabase.getInstance(databaseUrl).getReference("users").child(userId)
 
         database.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
