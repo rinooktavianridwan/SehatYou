@@ -30,11 +30,11 @@ fun PersonalizePage(navController: NavController = rememberNavController()) {
     val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     // State untuk menampung data input pengguna
-    var beratBadan by remember { mutableStateOf("55 kg") }
-    var tinggiBadan by remember { mutableStateOf("174 cm") }
-    var tglLahir by remember { mutableStateOf("11/22/2024") }
-    var jamKerjaStart by remember { mutableStateOf("09:00") }
-    var jamKerjaEnd by remember { mutableStateOf("17:00") }
+    var beratBadan by remember { mutableStateOf("...") }
+    var tinggiBadan by remember { mutableStateOf("...") }
+    var tglLahir by remember { mutableStateOf("...") }
+    var jamKerjaStart by remember { mutableStateOf("...") }
+    var jamKerjaEnd by remember { mutableStateOf("...") }
 
     // Load existing user data
     LaunchedEffect(Unit) {
