@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.sehatyou.model.UserEntity
+import com.example.sehatyou.utils.saveUserDataToFirebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -233,23 +235,18 @@ private fun registerUser(email: String, password: String, fullName: String, cont
     auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val user = auth.currentUser
-                val db = FirebaseFirestore.getInstance()
-                val userData = hashMapOf(
-                    "fullName" to fullName,
-                    "email" to email
+                val userId = FirebaseAuth.getInstance().currentUser?.uid
+                val userEntity = UserEntity(
+                    namaLengkap = fullName,
+                    kontak = "...",
+                    beratBadan = "...",
+                    tinggiBadan = "...",
+                    tglLahir = "...",
+                    jamKerjaStart = "...",
+                    jamKerjaEnd = "..."
                 )
-                db.collection("users").document(user!!.uid)
-                    .set(userData)
-                    .addOnSuccessListener {
-                        Toast.makeText(context, "Pendaftaran berhasil", Toast.LENGTH_SHORT).show()
-                        navController.navigate("login") {
-                            popUpTo("register") { inclusive = true }
-                        }
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(context, "Gagal menyimpan data", Toast.LENGTH_SHORT).show()
-                    }
+                saveUserDataToFirebase(userId, userEntity, context)
+                navController.navigate("login")
             } else {
                 Toast.makeText(context, "Pendaftaran gagal: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }

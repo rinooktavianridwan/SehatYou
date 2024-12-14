@@ -49,7 +49,7 @@ object SuggestionFetcher {
             try {
                 // Retrieve data
                 HealthData.updateSelectedRow()
-                val smartwatchData = HealthData.getSelectedRow()
+                val smartwatchgit Data = HealthData.getSelectedRow()
 
                 // Retrieve the 7 newest diaries
                 val diaries = repository.getLatestDiaries(7)

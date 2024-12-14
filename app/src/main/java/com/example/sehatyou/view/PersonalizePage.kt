@@ -30,21 +30,27 @@ fun PersonalizePage(navController: NavController = rememberNavController()) {
     val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     // State untuk menampung data input pengguna
-    var beratBadan by remember { mutableStateOf("...") }
-    var tinggiBadan by remember { mutableStateOf("...") }
-    var tglLahir by remember { mutableStateOf("...") }
-    var jamKerjaStart by remember { mutableStateOf("...") }
-    var jamKerjaEnd by remember { mutableStateOf("...") }
+    var dataUser by remember { mutableStateOf(UserEntity()) }
 
     // Load existing user data
     LaunchedEffect(Unit) {
         getUserDataFromFirebase(userId, context) { userEntity ->
-            beratBadan = userEntity.beratBadan
-            tinggiBadan = userEntity.tinggiBadan
-            tglLahir = userEntity.tglLahir
-            jamKerjaStart = userEntity.jamKerjaStart
-            jamKerjaEnd = userEntity.jamKerjaEnd
+            dataUser = userEntity
         }
+    }
+
+    var beratBadan by remember { mutableStateOf(dataUser.beratBadan) }
+    var tinggiBadan by remember { mutableStateOf(dataUser.tinggiBadan) }
+    var tglLahir by remember { mutableStateOf(dataUser.tglLahir) }
+    var jamKerjaStart by remember { mutableStateOf(dataUser.jamKerjaStart) }
+    var jamKerjaEnd by remember { mutableStateOf(dataUser.jamKerjaEnd) }
+
+    LaunchedEffect(dataUser) {
+        beratBadan = dataUser.beratBadan
+        tinggiBadan = dataUser.tinggiBadan
+        tglLahir = dataUser.tglLahir
+        jamKerjaStart = dataUser.jamKerjaStart
+        jamKerjaEnd = dataUser.jamKerjaEnd
     }
 
     Box(
@@ -134,14 +140,12 @@ fun PersonalizePage(navController: NavController = rememberNavController()) {
                     // Tombol Perbarui
                     Button(
                         onClick = {
-                            val userEntity = UserEntity(
-                                beratBadan = beratBadan,
-                                tinggiBadan = tinggiBadan,
-                                tglLahir = tglLahir,
-                                jamKerjaStart = jamKerjaStart,
-                                jamKerjaEnd = jamKerjaEnd
-                            )
-                            saveUserDataToFirebase(userId, userEntity, context)
+                            dataUser.beratBadan = beratBadan
+                            dataUser.tinggiBadan = tinggiBadan
+                            dataUser.tglLahir = tglLahir
+                            dataUser.jamKerjaStart = jamKerjaStart
+                            dataUser.jamKerjaEnd = jamKerjaEnd
+                            saveUserDataToFirebase(userId, dataUser, context)
                         },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
