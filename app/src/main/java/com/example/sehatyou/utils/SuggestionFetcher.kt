@@ -1,8 +1,12 @@
 package com.example.sehatyou.utils
 
 import android.content.Context
+import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import com.example.sehatyou.GroqAI.ChatRequest
 import com.example.sehatyou.GroqAI.GroqApiClient
 import com.example.sehatyou.GroqAI.Message
@@ -15,6 +19,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.example.sehatyou.data.HealthData
+import com.example.sehatyou.model.UserEntity
+import com.google.firebase.auth.FirebaseAuth
 
 object SuggestionFetcher {
 
@@ -28,28 +34,29 @@ object SuggestionFetcher {
 
     suspend fun fetchSuggestion(): SuggestEntity {
         val systemAI = """
-            Kamu adalah SehatBot, sebuah bot yang dibuat untuk aplikasi SehatYou. SehatYou adalah aplikasi mobile yang mengintegrasikan data kesehatan fisik dari smartwatch dan data mental well-being dari catatan harian (diary). Tujuan kamu adalah memberikan saran kegiatan yang relevan dan bermanfaat kepada user berdasarkan data tersebut.
-            
+            Kamu adalah SehatBot, sebuah bot yang dibuat untuk aplikasi SehatYou. SehatYou adalah aplikasi mobile yang mengintegrasikan data kesehatan fisik dari smartwatch dan data mental well-being dari catatan harian (diary). Tugas kamu adalah memberikan saran kegiatan yang relevan dan bermanfaat kepada user berdasarkan data tersebut.
             Berikut adalah aturan yang harus kamu ikuti:
-            1. Kamu akan diberikan informasi berupa diary user dan data smartwatch user (jika tersedia).
-            2. Jika data smartwatch tidak tersedia, kamu tetap harus memberikan saran yang relevan berdasarkan diary saja.
-            3. Output harus berupa saran kegiatan singkat dalam bahasa Indonesia, dengan panjang maksimal 20 kata.
-            4. Output harus berupa kalimat langsung yang praktis dan actionable (dapat langsung dilakukan oleh user).
-            5. Tidak perlu tambahkan kata-kata lain selain kegiatan yang relevan. Contoh output yang valid: "Luangkan waktu untuk membaca buku favorit sebelum tidur." 
-            6. Jadi tidak perlu menambahkan kalimat seperti "berdasarkan diary user" atau "berdasarkan data smartwatch user" atau "Berikut saran kegiatan yang relevan untuk user""
-            7. Jika ini bukan permintaan pertama, sistem akan menyertakan saran sebelumnya agar kamu dapat memberikan saran baru yang melengkapi saran sebelumnya tanpa mengulanginya.
-            8. Pertimbangkan konteks waktu (pagi, siang, malam) dan mood user yang tergambar dalam diary untuk membuat saran lebih personal.
-            9. Jika diary menunjukkan suasana hati negatif (stres, sedih), utamakan saran untuk manajemen stres atau aktivitas relaksasi.
-            10. Jika diary menunjukkan suasana hati positif (bahagia, produktif), berikan saran untuk mempertahankan atau meningkatkan suasana tersebut.
+            1. Kamu akan diberikan informasi berupa diary user dan/atau data smartwatch user. Jika hanya salah satu yang tersedia, gunakan data yang tersedia untuk memberikan saran. Jika keduanya tidak tersedia, berikan saran umum yang tetap relevan dan actionable.
+            2. Output harus berupa saran kegiatan singkat dalam bahasa Indonesia, dengan panjang maksimal 25 kata, tetapi idealnya antara 20–30 kata untuk fleksibilitas.
+            3. Output harus berupa kalimat langsung yang praktis dan actionable (dapat langsung dilakukan oleh user). Contoh output: "Luangkan waktu untuk membaca buku favorit sebelum tidur."
+            4. Jangan tambahkan kata atau frasa pengantar seperti "Berdasarkan diary user" atau "Berikut saran kegiatan." Langsung berikan saran kegiatan.
+            5. Jika ini bukan permintaan pertama, sistem akan menyertakan saran sebelumnya agar kamu dapat memberikan saran baru yang melengkapi saran sebelumnya tanpa mengulanginya.
+            6. Pertimbangkan konteks berikut untuk personalisasi saran:
+               - **Konteks waktu:** Saran pagi, siang, atau malam.
+               - **Mood user:** Jika diary menunjukkan mood negatif (stres, sedih), fokuskan pada manajemen stres atau relaksasi. Jika mood positif (bahagia, produktif), fokuskan pada mempertahankan atau meningkatkan suasana hati tersebut.
+               - **Data smartwatch:** Gunakan data fisik seperti langkah harian, detak jantung, atau kualitas tidur untuk memberikan saran yang lebih kontekstual.
+            7. Jika ada konflik antara mood user dan data smartwatch (misalnya, mood stres tetapi aktivitas tinggi), prioritaskan mood untuk memberikan saran yang lebih relevan secara emosional.
+            8. Berikan saran yang beragam dan tidak berulang dalam sesi yang sama. Jika diperlukan, buat saran bertahap yang saling melengkapi.
+            9. Jika tidak ada data (diary maupun smartwatch), berikan saran umum yang relevan untuk kesejahteraan mental dan fisik.
             
-            Tugasmu adalah memberikan saran kegiatan yang relevan dan terarah untuk user.
+            Tujuanmu adalah memberikan saran kegiatan yang personal, relevan, dan dapat meningkatkan kesejahteraan fisik maupun mental user.
         """.trimIndent()
 
         return withContext(Dispatchers.IO) {
             try {
                 // Retrieve data
                 HealthData.updateSelectedRow()
-                val smartwatchgit Data = HealthData.getSelectedRow()
+                val smartwatchData = HealthData.getSelectedRow()
 
                 // Retrieve the 7 newest diaries
                 val diaries = repository.getLatestDiaries(7)
@@ -64,13 +71,24 @@ object SuggestionFetcher {
                     DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("id", "ID"))
                 )
                 val formattedTime = currentDateTime.format(DateTimeFormatter.ofPattern("HH:mm", Locale("id", "ID")))
-                var messageAI =
-                        "\"$systemAI\"\n" +
-                        "Ini adalah user dengan nama Vgte, dan ini adalah diary miliknya:\n" +
-                        "$diaryText\n" +
-                        "Berikut adalah 10 saran yang kamu berikan sebelumnya:\n" +
-                        "$suggestionText\n" +
-                        "Sekarang $formattedDate pukul $formattedTime, berikan saran yang relevan sekarang untuk user\n"
+
+                var messageAI = "\"$systemAI\"\n"
+
+                if (diaries.isNotEmpty()) {
+                    messageAI +=
+                        "Ini adalah data suasana mood, tanggal, jam, dan isi diary milik user:\n" +
+                        "$diaryText\n"
+                } else {
+                    messageAI += "(Tidak ada diary yang dituliskan)\n"
+                }
+
+                if (suggestions.isNotEmpty()) {
+                    messageAI +=
+                        "Berikut adalah saran yang kamu berikan sebelumnya:\n" +
+                        "$suggestionText\n"
+                } else {
+                    messageAI += "(Tidak ada saran yang sebelumnya diberikan)\n"
+                }
 
                 if (smartwatchData != null) {
                     messageAI +=
@@ -83,6 +101,8 @@ object SuggestionFetcher {
                     messageAI += "(data smartwatch kosong/tidak ada karena user tidak menyambungkan smartwatch)"
                 }
 
+                messageAI += "Sekarang $formattedDate pukul $formattedTime, berikan saran yang relevan sekarang untuk user\n"
+                Log.d("ai msg", messageAI)
 
                 val descriptionMessages = listOf(
                     Message(
@@ -115,6 +135,7 @@ object SuggestionFetcher {
                     time = formattedTime,
                     favorite = false
                 )
+
             } catch (e: Exception) {
                 throw e
             }
