@@ -97,7 +97,7 @@ fun SettingsPage(navController: NavController = rememberNavController()) {
                 modifier = Modifier
                     .padding(top = 80.dp, bottom = 40.dp)
                     .align(Alignment.Center),
-                color = colorResource(id = R.color.F7B087)
+                color = colorResource(id = R.color.black)
             )
         }
 

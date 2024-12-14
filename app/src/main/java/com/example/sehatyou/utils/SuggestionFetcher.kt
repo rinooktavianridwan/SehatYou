@@ -114,6 +114,7 @@ object SuggestionFetcher {
                 val descriptionResponse = GroqApiClient.api.getChatResponse(descriptionRequest)
                 val descriptionText = descriptionResponse?.choices?.get(0)?.message?.content
                     ?: "Deskripsi tidak tersedia"
+                        .replace("\'","")
 
                 val titleMessages = listOf(
                     Message(
@@ -127,6 +128,7 @@ object SuggestionFetcher {
                 val titleResponse = GroqApiClient.api.getChatResponse(titleRequest)
                 val titleText = titleResponse?.choices?.get(0)?.message?.content
                     ?: "Judul tidak tersedia"
+                        .replace("\'","")
 
                 SuggestEntity(
                     title = titleText,

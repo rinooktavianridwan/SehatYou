@@ -2,6 +2,7 @@ package com.example.sehatyou.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -9,9 +10,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,19 +58,45 @@ fun PersonalizePage(navController: NavController = rememberNavController()) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize().padding(top = 40.dp)
             .background(colorResource(id = R.color.F5F5F5))
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // Tombol kembali
             IconButton(
-                onClick = { navController.navigate("setting") },
+                onClick = {
+                    navController.popBackStack()
+                },
+                colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(80.dp, 80.dp)
                     .align(Alignment.End)
-                    .padding(16.dp)
+                    .padding(start = 0.dp, top = 40.dp, end = 40.dp, bottom = 0.dp)
+                    .shadow(
+                        4.dp,
+                        CircleShape,
+                        ambientColor = Color.Black,
+                        spotColor = Color.Black
+                    ),
+            )
+            {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "back"
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 40.dp, bottom = 40.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back")
+                Text(
+                    text = "Data Diri",
+                    fontSize = 40.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = colorResource(id = R.color.black)
+                )
             }
 
             // Box untuk form input

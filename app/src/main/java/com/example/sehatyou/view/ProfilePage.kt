@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -89,7 +90,7 @@ fun ProfilePage(navController: NavController = rememberNavController()) {
         ) {
 
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().padding(top = 40.dp)
             ) {
                 IconButton(
                     onClick = {
@@ -97,9 +98,9 @@ fun ProfilePage(navController: NavController = rememberNavController()) {
                     },
                     colors = IconButtonColors(Color.White, Color.Black, Color.White, Color.Black),
                     modifier = Modifier
-                        .size(60.dp, 60.dp)
+                        .size(80.dp, 80.dp)
                         .align(Alignment.End)
-                        .padding(start = 0.dp, top = 15.dp, end = 20.dp, bottom = 0.dp)
+                        .padding(start = 0.dp, top = 40.dp, end = 40.dp, bottom = 0.dp)
                         .shadow(
                             4.dp,
                             CircleShape,
@@ -114,21 +115,19 @@ fun ProfilePage(navController: NavController = rememberNavController()) {
                     )
                 }
 
-                Image(
-                    painterResource(id = R.drawable.icon__profile_circle_),
-                    "profile",
+                Box(
                     modifier = Modifier
-                        .size(150.dp, 150.dp)
-                        .padding(0.dp, 0.dp, 0.dp, 5.dp)
-                        .align(Alignment.CenterHorizontally),
-
+                        .fillMaxWidth()
+                        .padding(top = 40.dp, bottom = 40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Data Diri",
+                        fontSize = 40.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colorResource(id = R.color.black)
                     )
-
-                Text(
-                    text = "Ganti Gambar",
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    color = colorResource(id = R.color.purple423892)
-                )
+                }
 
                 Box(
                     modifier = Modifier
@@ -257,4 +256,10 @@ fun ProfilePage(navController: NavController = rememberNavController()) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ProfilePreview() {
+    ProfilePage(rememberNavController())
 }
