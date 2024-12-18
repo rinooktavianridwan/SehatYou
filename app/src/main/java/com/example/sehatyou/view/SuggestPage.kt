@@ -103,12 +103,12 @@ fun SuggestPage(navController: NavController = rememberNavController(), viewMode
                 Spacer(modifier = Modifier.width(235.dp))
 
                 IconButton(
-                    onClick = { navController.navigate("menu")},
+                    onClick = { navController.navigate("setting")},
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Icon(
                         Icons.Filled.Menu,
-                        contentDescription = "menu",
+                        contentDescription = "setting",
                         modifier = Modifier.size(40.dp)
                     )
 
